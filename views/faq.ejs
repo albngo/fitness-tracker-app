@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions</title>
+    <!-- Link to the main.css file -->
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+<!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
+            <!-- Fitness Dropdown Button -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+                <div class="dropdown-content">
+                    <a href="/workout" class="dropdown-item">Generate Workout</a>
+                    <a href="/water" class="dropdown-item">Water Tracker</a>
+                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                </div>
+            </li>
+
+            <li><a href="/history" class="nav-link">History</a></li>
+            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+            <li><a href="/settings" class="nav-link">Settings</a></li>
+
+            <!-- User Icon -->
+            <% if (user) { %>
+                <li class="user-icon">
+                    <a href="/profile">
+                        <img src="/avatar.png" alt="User Icon">
+                        <span><%= user.username %></span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li><a href="/users/login" class="nav-link">Login</a></li>
+                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Frequently Asked Questions</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>General Fitness Questions</h2>
+            <dl>
+                <dt>What is the best way to get started with a fitness routine?</dt>
+                <dd>The best way to start is by setting realistic goals, choosing exercises you enjoy, and gradually increasing the intensity. It's also important to balance strength training, cardio, and flexibility exercises.</dd>
+                
+                <dt>How often should I work out to see results?</dt>
+                <dd>For most people, working out 3-5 times a week is optimal for seeing progress, depending on the intensity and your fitness level. Consistency is key!</dd>
+
+                <dt>Should I focus on cardio or strength training?</dt>
+                <dd>A balanced approach is recommended. Cardio is great for heart health, while strength training helps build muscle and increase metabolism. A mix of both is ideal.</dd>
+            </dl>
+        </section>
+
+        <section>
+            <h2>App-Related Questions</h2>
+            <dl>
+                <dt>What is this fitness app all about?</dt>
+                <dd>This app provides a comprehensive platform for tracking your fitness journey. It includes workout plans, progress tracking, water intake, sleep monitoring, and more—all in one place!</dd>
+                
+                <dt>How do I generate a workout?</dt>
+                <dd>Simply go to the workout section, enter your target muscle group, preferred difficulty level, and exercise type. You can also choose to include exercise instructions for better guidance.</dd>
+
+                <dt>Can I track my nutrition with this app?</dt>
+                <dd>At the moment, the app focuses on fitness and health tracking, but nutrition tracking is something we’re working on for future updates.</dd>
+            </dl>
+        </section>
+
+        <hr width="100%" size="3" noshade>
+
+        <!-- Feedback Section -->
+        <section class="feedback-section">
+            <h2>Feedback</h2>
+            <p>Your feedback is very important to us! Please fill out the form below if you have any suggestions, questions, or comments.</p>
+            <form action="/submit-feedback" method="POST">
+                <label for="feedbackName">Your Name (Optional)</label>
+                <input type="text" name="name" id="feedbackName" placeholder="Enter your name">
+                <br>
+
+                <label for="feedbackEmail">Your Email (Optional)</label>
+                <input type="email" name="email" id="feedbackEmail" placeholder="Enter your email">
+                <br>
+
+                <label for="feedbackMessage">Your Feedback</label>
+                <textarea name="message" id="feedbackMessage" rows="5" placeholder="Enter your feedback here..." required></textarea>
+                <br>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Fitness Tracker App</p>
+    </footer>
+
+    <script>
+        // Toggle the dropdown menu visibility
+        function toggleDropdown() {
+            const dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

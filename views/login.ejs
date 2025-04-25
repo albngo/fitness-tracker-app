@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <title>Login</title>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+                <div class="dropdown-content">
+                    <a href="/workout" class="dropdown-item">Generate Workout</a>
+                    <a href="/water" class="dropdown-item">Water Tracker</a>
+                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                </div>
+            </li>
+
+            <li><a href="/history" class="nav-link">History</a></li>
+            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+            <li><a href="/settings" class="nav-link">Settings</a></li>
+
+            <% if (user) { %>
+                <li class="user-icon">
+                    <a href="/profile">
+                        <img src="/avatar.png" alt="User Icon">
+                        <span><%= user.username %></span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li><a href="/users/login" class="nav-link">Login</a></li>
+                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+
+    <h1>Login</h1>
+
+    <form id="loginForm" action="/users/login" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <small class="error" style="color: red;"></small><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <small class="error" style="color: red;"></small><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <% if (message) { %>
+        <p style="color: red;"><%= message %></p>
+    <% } %>
+
+    <p>Don't have an account? <a href="/users/register">Register here</a></p>
+
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            let isValid = true;
+
+            document.querySelectorAll('.error').forEach(error => error.textContent = '');
+
+            if (!email.value.trim()) {
+                email.nextElementSibling.textContent = 'Email is required.';
+                isValid = false;
+            }
+
+            if (!password.value.trim()) {
+                password.nextElementSibling.textContent = 'Password is required.';
+                isValid = false;
+            }
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>

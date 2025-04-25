@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker</title>
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
+            <!-- Fitness Dropdown Button -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+                <div class="dropdown-content">
+                    <a href="/workout" class="dropdown-item">Generate Workout</a>
+                    <a href="/water" class="dropdown-item">Water Tracker</a>
+                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                </div>
+            </li>
+
+            <li><a href="/history" class="nav-link">History</a></li>
+            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+            <li><a href="/settings" class="nav-link">Settings</a></li>
+
+            <!-- User Icon -->
+            <% if (user) { %>
+                <li class="user-icon">
+                    <a href="/profile">
+                        <img src="/avatar.png" alt="User Icon">
+                        <span><%= user.username %></span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li><a href="/users/login" class="nav-link">Login</a></li>
+                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+
+    <h1>Water Tracker</h1>
+
+    <!-- Form to log water intake -->
+    <form action="/water/log" method="POST">
+        <label for="amount_ml">Enter Water Intake (ml):</label>
+        <input type="number" id="amount_ml" name="amount_ml" required>
+        <button type="submit">Log Water</button>
+    </form>
+
+    <h2>Your Water Logs</h2>
+    <% if (waterLogs && waterLogs.length > 0) { %>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount (ml)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% waterLogs.forEach(log => { %>
+                    <tr>
+                        <td><%= new Date(log.date).toISOString().split('T')[0] %></td>
+                        <td><%= log.amount_ml %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No water logs found. Start logging your water intake!</p>
+    <% } %>
+
+    <!-- Daily Goal Progress Bar -->
+    <h2>Today's Water Intake</h2>
+    <div style="width: 100%; background: #eee; border-radius: 10px; overflow: hidden;">
+        <div id="progress-bar" style="height: 30px; width: 0; background: #4caf50; text-align: center; color: white;">
+            0%
+        </div>
+    </div>
+
+    <!-- Visualisation Chart -->
+    <h2>Water Intake Over the Last 7 Days</h2>
+    <canvas id="waterChart" width="400" height="200"></canvas>
+
+
+    <!-- Footer (optional) -->
+    <footer>
+        <p>Fitness Tracker &copy; 2025</p>
+    </footer>
+
+    <script>
+        // JavaScript for dropdown toggle
+        function toggleDropdown() {
+            var dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Calculate total water intake for the day
+        const waterLogs = <%- JSON.stringify(waterLogs) %>; // Pass logs to the script
+        const today = new Date().toISOString().split('T')[0];
+        const dailyGoal = 2000; // Set daily goal in ml
+        let todayTotal = 0;
+
+        waterLogs.forEach(log => {
+            if (new Date(log.date).toISOString().split('T')[0] === today) {
+                todayTotal += log.amount_ml;
+            }
+        });
+
+        // Update Progress Bar
+        const progress = Math.min((todayTotal / dailyGoal) * 100, 100); // Cap at 100%
+        const progressBar = document.getElementById('progress-bar');
+        progressBar.style.width = progress + '%';
+        progressBar.textContent = `${Math.round(progress)}% (${todayTotal} ml)`;
+
+        // Prepare Data for Chart
+        const dates = [];
+        const amounts = [];
+        waterLogs.forEach(log => {
+            const dateStr = new Date(log.date).toISOString().split('T')[0];
+            if (!dates.includes(dateStr)) {
+                dates.push(dateStr);
+                amounts.push(0);
+            }
+            amounts[dates.indexOf(dateStr)] += log.amount_ml;
+        });
+
+        // Reverse the data to make recent days appear on the right
+        dates.reverse();
+        amounts.reverse();
+
+        // Create Chart
+        const ctx = document.getElementById('waterChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Water Intake (ml)',
+                    data: amounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

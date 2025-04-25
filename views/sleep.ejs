@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Tracker</title>
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
+            <!-- Fitness Dropdown Button -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+                <div class="dropdown-content">
+                    <a href="/workout" class="dropdown-item">Generate Workout</a>
+                    <a href="/water" class="dropdown-item">Water Tracker</a>
+                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                </div>
+            </li>
+
+            <li><a href="/history" class="nav-link">History</a></li>
+            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+            <li><a href="/settings" class="nav-link">Settings</a></li>
+
+            <!-- User Icon -->
+            <% if (user) { %>
+                <li class="user-icon">
+                    <a href="/profile">
+                        <img src="/avatar.png" alt="User Icon">
+                        <span><%= user.username %></span>
+                    </a>
+                </li>
+            <% } else { %>
+                <li><a href="/users/login" class="nav-link">Login</a></li>
+                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+    
+    <h1>Sleep Tracker</h1>
+
+    <!-- Form to log sleep data -->
+    <form action="/sleep/log" method="POST">
+        <label for="sleep_duration_minutes">Enter Sleep Duration (minutes):</label>
+        <input type="number" id="sleep_duration_minutes" name="sleep_duration_minutes" required>
+        <label for="sleep_quality">Sleep Quality:</label>
+        <select id="sleep_quality" name="sleep_quality" required>
+            <option value="poor">Poor</option>
+            <option value="fair">Fair</option>
+            <option value="good">Good</option>
+            <option value="excellent">Excellent</option>
+        </select>
+        <button type="submit">Log Sleep</button>
+    </form>
+
+    <h2>Your Sleep Logs</h2>
+    <% if (sleepLogs && sleepLogs.length > 0) { %>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Duration (minutes)</th>
+                    <th>Quality</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% sleepLogs.forEach(log => { %>
+                    <tr>
+                        <td><%= new Date(log.date).toISOString().split('T')[0] %></td>
+                        <td><%= log.sleep_duration_minutes %></td>
+                        <td><%= log.sleep_quality %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No sleep logs found. Start logging your sleep!</p>
+    <% } %>
+
+    <!-- Sleep History Chart -->
+    <h2>Sleep History (Last 7 Days)</h2>
+    <canvas id="sleepChart" width="400" height="200"></canvas>
+
+    <!-- Footer (optional) -->
+    <footer>
+        <p>Fitness Tracker &copy; 2025</p>
+    </footer>
+
+    <script>
+        // JavaScript for dropdown toggle
+        function toggleDropdown() {
+            var dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Pass the sleepLogs from the server to the script
+        const sleepLogs = <%- JSON.stringify(sleepLogs) %>; 
+
+        // Prepare data for the chart
+        const dates = [];
+        const durations = [];
+
+        sleepLogs.forEach(log => {
+            const dateObj = new Date(log.date);  // Convert to Date object
+            const dateStr = dateObj.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
+
+            // If the date is not already in the array, add it
+            if (!dates.includes(dateStr)) {
+                dates.push(dateStr);
+                durations.push(0); // Initialize sleep duration for this date
+            }
+
+            // Add the sleep duration for this date
+            durations[dates.indexOf(dateStr)] += log.sleep_duration_minutes;
+        });
+
+        // Create the chart
+        const ctx = document.getElementById('sleepChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Sleep Duration (minutes)',
+                    data: durations,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body> 
+</html>
