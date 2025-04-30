@@ -8,37 +8,40 @@
 </head>
 <body>
 
-    <nav>
-        <ul>
-            <li><a href="/" class="nav-link">Home</a></li>
-            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+<!-- Navbar -->
+<nav>
+    <ul>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
 
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
-                <div class="dropdown-content">
-                    <a href="/workout" class="dropdown-item">Generate Workout</a>
-                    <a href="/water" class="dropdown-item">Water Tracker</a>
-                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
-                </div>
+        <!-- Fitness Dropdown Button -->
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+            <div class="dropdown-content">
+                <a href="/workout" class="dropdown-item">Generate Workout</a>
+                <a href="/water" class="dropdown-item">Water Tracker</a>
+                <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+            </div>
+        </li>
+
+        <li><a href="/history" class="nav-link">History</a></li>
+        <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+
+        <!-- User Icon -->
+        <% if (user) { %>
+            <li class="user-icon">
+                <a href="/profile">
+                    <span><%= user.username %></span>
+                    <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
+                </a>
             </li>
-
-            <li><a href="/history" class="nav-link">History</a></li>
-            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
-            <li><a href="/settings" class="nav-link">Settings</a></li>
-
-            <% if (user) { %>
-                <li class="user-icon">
-                    <a href="/profile">
-                        <img src="/avatar.png" alt="User Icon">
-                        <span><%= user.username %></span>
-                    </a>
-                </li>
-            <% } else { %>
-                <li><a href="/users/login" class="nav-link">Login</a></li>
-                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
-            <% } %>
-        </ul>
-    </nav>
+        <% } else { %>
+            <li><a href="/users/login" class="nav-link">Login</a></li>
+            <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>
 
     <h1>Register</h1>
 

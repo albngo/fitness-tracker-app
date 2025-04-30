@@ -32,8 +32,8 @@
             <% if (user) { %>
                 <li class="user-icon">
                     <a href="/profile">
-                        <img src="/avatar.png" alt="User Icon">
                         <span><%= user.username %></span>
+                        <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
                     </a>
                 </li>
             <% } else { %>

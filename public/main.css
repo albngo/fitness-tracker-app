@@ -216,3 +216,39 @@ form button:hover {
     background-color: #f5f5f5;
     color: #333;
 }
+
+.icon-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.icon-option {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+}
+
+.icon-option:hover {
+    transform: scale(1.1);
+    border: 2px solid #4CAF50;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + label img,
+label img.selected {
+    border: 3px solid #4CAF50;
+}
+

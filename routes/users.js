@@ -127,4 +127,59 @@ router.post('/login', (req, res) => {
     });
 });
 
+// Route to handle updating user details
+router.post('/profile/update', (req, res) => {
+    const { username, email } = req.body;
+    const userId = req.session.user.id;
+
+    if (!username || !email) {
+        return res.redirect('/profile?message=All fields are required');
+    }
+
+    const trimmedUsername = validator.trim(username);
+    const trimmedEmail = validator.trim(email).toLowerCase();
+
+    // Check if new email is already taken by another user
+    const checkEmailSQL = 'SELECT id FROM users WHERE email = ? AND id != ?';
+    db.query(checkEmailSQL, [trimmedEmail, userId], (err, results) => {
+        if (err) {
+            console.error('Error checking email uniqueness:', err);
+            return res.status(500).send('Error checking email');
+        }
+
+        if (results.length > 0) {
+            return res.redirect('/profile?message=Email already in use');
+        }
+
+        const updateSQL = 'UPDATE users SET username = ?, email = ? WHERE id = ?';
+        db.query(updateSQL, [trimmedUsername, trimmedEmail, userId], (err, result) => {
+            if (err) {
+                console.error('Error updating profile:', err);
+                return res.status(500).send('Error updating profile');
+            }
+
+            console.log('Profile updated successfully:', result);
+
+            // Update session
+            req.session.user.username = trimmedUsername;
+            req.session.user.email = trimmedEmail;
+
+            res.redirect('/profile?message=Profile updated successfully');
+        });
+    });
+});
+
+// Route to handle logout
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Error logging out');
+        }
+
+        // Redirect to the homepage or login page after logging out
+        res.redirect('/');
+    });
+});
+
 export default router;

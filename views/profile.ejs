@@ -1,2 +1,130 @@
-<!-- User’s profile page with personal details and fitness data. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker - Profile</title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
 
+<!-- Navbar -->
+<nav>
+    <ul>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+            <div class="dropdown-content">
+                <a href="/workout" class="dropdown-item">Generate Workout</a>
+                <a href="/water" class="dropdown-item">Water Tracker</a>
+                <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+            </div>
+        </li>
+        <li><a href="/history" class="nav-link">History</a></li>
+        <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+        <% if (user) { %>
+            <li class="user-icon">
+                <a href="/profile">
+                    <span><%= user.username %></span>
+                    <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
+                </a>
+            </li>
+        <% } else { %>
+            <li><a href="/users/login" class="nav-link">Login</a></li>
+            <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>
+
+<!-- Main content -->
+<div class="main-content">
+    <h1>Welcome to your profile</h1>
+    <p>Here you can view your account details and log out.</p>
+
+    <p>Username: <%= user.username %></p>
+    <p>Email: <%= user.email %></p>
+
+    <form action="/users/profile/update" method="POST">
+        <input type="hidden" name="selected_icon" id="selected_icon" />
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" value="<%= user.username %>" required />
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="<%= user.email %>" required />
+
+        <div class="icon-selection">
+            <h3>Choose Your Icon</h3>
+            <div class="icons">
+                <input type="radio" id="icon1" name="icon" value="avatarblack.png" />
+                <label for="icon1">
+                    <img src="/avatarblack.png" alt="Icon 1" class="icon-option" />
+                </label>
+
+                <input type="radio" id="icon2" name="icon" value="avatarblue.png" />
+                <label for="icon2">
+                    <img src="/avatarblue.png" alt="Icon 2" class="icon-option" />
+                </label>
+
+                <input type="radio" id="icon3" name="icon" value="avatargreen.png" />
+                <label for="icon3">
+                    <img src="/avatargreen.png" alt="Icon 3" class="icon-option" />
+                </label>
+
+                <input type="radio" id="icon4" name="icon" value="avatarorange.png" />
+                <label for="icon4">
+                    <img src="/avatarorange.png" alt="Icon 4" class="icon-option" />
+                </label>
+
+                <input type="radio" id="icon5" name="icon" value="avatarred.png" />
+                <label for="icon5">
+                    <img src="/avatarred.png" alt="Icon 5" class="icon-option" />
+                </label>
+
+                <input type="radio" id="icon6" name="icon" value="avataryellow.png" />
+                <label for="icon6">
+                    <img src="/avataryellow.png" alt="Icon 6" class="icon-option" />
+                </label>
+            </div>
+        </div>
+
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <form action="/users/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>Fitness Tracker &copy; 2025</p>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileImage = document.querySelector('.user-icon img');
+        const iconRadios = document.querySelectorAll('input[name="icon"]');
+        const selectedIconInput = document.getElementById('selected_icon');
+
+        iconRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    profileImage.src = `/${this.value}`;
+                    selectedIconInput.value = this.value;
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
