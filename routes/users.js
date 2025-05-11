@@ -129,7 +129,7 @@ router.post('/login', (req, res) => {
 
 // Route to handle updating user details
 router.post('/profile/update', (req, res) => {
-    const { username, email } = req.body;
+    const { username, email, selected_icon } = req.body;
     const userId = req.session.user.id;
 
     if (!username || !email) {
@@ -138,6 +138,7 @@ router.post('/profile/update', (req, res) => {
 
     const trimmedUsername = validator.trim(username);
     const trimmedEmail = validator.trim(email).toLowerCase();
+    const icon = selected_icon?.trim() || null;
 
     // Check if new email is already taken by another user
     const checkEmailSQL = 'SELECT id FROM users WHERE email = ? AND id != ?';
@@ -151,23 +152,23 @@ router.post('/profile/update', (req, res) => {
             return res.redirect('/profile?message=Email already in use');
         }
 
-        const updateSQL = 'UPDATE users SET username = ?, email = ? WHERE id = ?';
-        db.query(updateSQL, [trimmedUsername, trimmedEmail, userId], (err, result) => {
+        const updateSQL = 'UPDATE users SET username = ?, email = ?, profileIcon = ? WHERE id = ?';
+        db.query(updateSQL, [trimmedUsername, trimmedEmail, icon, userId], (err) => {
             if (err) {
-                console.error('Error updating profile:', err);
+                console.error('Error updating user profile:', err);
                 return res.status(500).send('Error updating profile');
             }
 
-            console.log('Profile updated successfully:', result);
-
-            // Update session
+            // Update the session to reflect new values
             req.session.user.username = trimmedUsername;
             req.session.user.email = trimmedEmail;
+            req.session.user.profileIcon = icon;
 
             res.redirect('/profile?message=Profile updated successfully');
         });
     });
 });
+
 
 // Route to handle logout
 router.post('/logout', (req, res) => {
