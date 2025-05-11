@@ -9,6 +9,12 @@
 <body>
 <!-- Navbar -->
 <nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
     <ul>
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
@@ -87,6 +93,11 @@
 
             if (!isValid) e.preventDefault();
         });
+
+        function toggleMenu() {
+            const navList = document.querySelector('nav ul');
+            navList.classList.toggle('active');
+        }
     </script>
 
 </body>
