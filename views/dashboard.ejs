@@ -1,2 +1,77 @@
-<!-- Displays the user’s fitness overview, such as workout summaries, water intake, sleep, and other health-related data. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker - Dashboard</title>
+    <!-- Link to the main.css file -->
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+<!-- Navbar -->
+    <nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul>
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
 
+            <!-- Fitness Dropdown Button -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+                <div class="dropdown-content">
+                    <a href="/workout" class="dropdown-item">Generate Workout</a>
+                    <a href="/water" class="dropdown-item">Water Tracker</a>
+                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                </div>
+            </li>
+
+            <li><a href="/history" class="nav-link">History</a></li>
+            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+            <li><a href="/settings" class="nav-link">Settings</a></li>
+
+            <!-- User Icon -->
+            <% if (user) { %>
+                <li class="user-icon">
+                    <a href="/profile">
+                        <span><%= user.username %></span>
+                        <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
+                    </a>
+                </li>
+            <% } else { %>
+                <li><a href="/users/login" class="nav-link">Login</a></li>
+                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+            <% } %>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <h1>Welcome to the Fitness Tracker</h1>
+        <p>Your personal fitness companion to help you stay fit and healthy.</p>
+        <p>Generate workouts, track water intake, or sleep to achieve your fitness goals.</p>
+    </div>
+
+    <!-- Footer (optional) -->
+    <footer>
+        <p>Fitness Tracker &copy; 2025</p>
+    </footer>
+
+    <!-- JavaScript for dropdown toggle -->
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
+</script>
+</body>
+</html>
