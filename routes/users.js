@@ -12,7 +12,7 @@ router.get('/register', (req, res) => {
 
 // Route to handle registration form submission
 router.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, profileIcon } = req.body;
 
     // Trim inputs and validate
     if (!username?.trim() || !email?.trim() || !password?.trim()) {
@@ -56,8 +56,8 @@ router.post('/register', (req, res) => {
                 return res.status(500).send('Something went wrong!');
             }
 
-            const sql = 'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)';
-            db.query(sql, [trimmedUsername, trimmedEmail, hashedPassword], (err) => {
+            const sql = 'INSERT INTO users (username, email, password_hash, profileIcon) VALUES (?, ?, ?)';
+            db.query(sql, [trimmedUsername, trimmedEmail, hashedPassword, profileIcon], (err) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send('Something went wrong!');
@@ -115,7 +115,7 @@ router.post('/login', (req, res) => {
             }
 
             // Store user details in session
-            req.session.user = { id: user.id, username: user.username, email: user.email };
+            req.session.user = { id: user.id, username: user.username, email: user.email, profileIcon: user.profileIcon};
             req.session.save((err) => {
                 if (err) {
                     console.error('Session save error:', err);

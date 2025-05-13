@@ -52,6 +52,12 @@ app.get('/faq', (req, res) => {
     res.render('faq', { success: req.query.success || false });
 });
 
+// dashboard route
+app.get('/dashboard', (req, res) => {
+    // Pass user-specific data, e.g., progress or health data
+    res.render('dashboard', { user: req.session.user });
+});
+
 // Handle feedback form submission
 app.post('/submit-feedback', (req, res) => {
     const { name, email, message } = req.body;
@@ -74,34 +80,6 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
-
-//Profile route
-app.get('/profile', (req, res) => {
-    res.render('profile', { user: req.session.user });
-});
-
-// Assuming user is authenticated and available as req.user
-app.post('/users/profile/update', async (req, res) => {
-const { username, email, selected_icon } = req.body;
-const profileIcon = selected_icon;
-
-    try {
-        const user = await User.findById(req.user.id);
-        user.username = username;
-        user.email = email;
-
-        if (profileIcon) {
-            user.profileIcon = profileIcon;
-        }
-
-        await user.save();
-        res.redirect('/profile');
-    } catch (error) {
-        console.error('Profile update error:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 
 // Start the server
 const PORT = process.env.PORT || 8000;

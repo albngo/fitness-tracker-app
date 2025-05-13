@@ -13,11 +13,11 @@ router.use((req, res, next) => {
 });
 
 // Route to render the profile page
-router.get('/profile', (req, res) => {
+router.get('/', (req, res) => {
     const userId = req.user.id;
 
     // Fetch user data from the database
-    const sql = 'SELECT username, email FROM users WHERE id = ?';
+    const sql = 'SELECT username, email, profileIcon FROM users WHERE id = ?';
     db.query(sql, [userId], (err, results) => {
         if (err) {
             console.error('Error fetching user profile:', err);
