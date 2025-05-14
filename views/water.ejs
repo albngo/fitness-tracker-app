@@ -90,11 +90,12 @@
 
     <!-- Daily Goal Progress Bar -->
     <h2>Today's Water Intake</h2>
-    <div style="width: 100%; background: #eee; border-radius: 10px; overflow: hidden;">
-        <div id="progress-bar" style="height: 30px; width: 0; background: #4caf50; text-align: center; color: white;">
-            0%
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
+            <%= percentage %>% (<%= waterTotal %> / <%= waterGoal %> ml)
         </div>
     </div>
+
 
     <!-- Visualisation Chart -->
     <h2>Water Intake Over the Last 7 Days</h2>

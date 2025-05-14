@@ -59,8 +59,34 @@
 
     <!-- Main content -->
     <div class="main-content">
-        <h1>Welcome to your Dashboard</h1>
+        <h1>Welcome to your Dashboard, <%= user.username %>.</h1>
         <p>Have a look at your stats at a glance!</p>
+    </div>
+
+    <div class="dashboard">
+        <h1>Dashboard</h1>
+
+        <ul class="dashboard-stats">
+            <!-- Sleep -->
+            <li class="dashboard-item">
+                <h3>Last Night's Sleep</h3>
+                <p><strong>Length:</strong> <%= sleepLength %> hours</p>
+                <p><strong>Quality:</strong> <%= sleepQuality %></p>
+            </li>
+
+            <!-- Water Progress -->
+            <li class="dashboard-item">
+                <h3>Today's Water Intake</h3>
+                <p><strong>Total Intake:</strong> <%= waterTotal %> / <%= waterGoal %> ml</p>
+                <p><strong>Percentage:</strong> <%= percentage %>%</p>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
+                        <%= percentage %>%
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <!-- Footer (optional) -->
