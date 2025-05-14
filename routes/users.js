@@ -16,7 +16,8 @@ router.post('/register', (req, res) => {
 
     // Trim inputs and validate
     if (!username?.trim() || !email?.trim() || !password?.trim()) {
-        return res.redirect('/users/register?message=All fields are required');
+        req.flash('error', 'All fields are required');
+        return res.redirect('/users/register');
     }
 
     const trimmedUsername = username.trim();
@@ -25,17 +26,20 @@ router.post('/register', (req, res) => {
 
     // Validate username length and format
     if (!validator.isLength(trimmedUsername, { min: 3, max: 20 }) || !validator.isAlphanumeric(trimmedUsername, 'en-US', { ignore: '_' })) {
+        req.flash('error', 'Username must be 3-20 characters and can only contain letters, numbers, and underscores');
         return res.redirect('/users/register?message=Username must be 3-20 characters and can only contain letters, numbers, and underscores');
     }
 
     // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
-        return res.redirect('/users/register?message=Invalid email address');
+        req.flash('error', 'Invalid email address');
+        return res.redirect('/users/register');
     }
 
     // Validate password strength
     if (!validator.isStrongPassword(trimmedPassword, { minLength: 8, minNumbers: 1, minSymbols: 1, minUppercase: 1 })) {
-        return res.redirect('/users/register?message=Password must be at least 8 characters long, include one uppercase letter, one number, and one special character');
+        req.flash('error', 'Password must be at least 8 characters long, include one uppercase letter, one number, and one special character');
+        return res.redirect('/users/register');
     }
 
     // Check if email already exists
@@ -47,7 +51,8 @@ router.post('/register', (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.redirect('/users/register?message=Email already taken');
+            req.flash('error', 'Email already taken');
+            return res.redirect('/users/register');
         }
 
         bcrypt.hash(trimmedPassword, 10, (err, hashedPassword) => {
@@ -56,14 +61,14 @@ router.post('/register', (req, res) => {
                 return res.status(500).send('Something went wrong!');
             }
 
-            const sql = 'INSERT INTO users (username, email, password_hash, profileIcon) VALUES (?, ?, ?)';
+            const sql = 'INSERT INTO users (username, email, password_hash, profileIcon) VALUES (?, ?, ?, ?)';
             db.query(sql, [trimmedUsername, trimmedEmail, hashedPassword, profileIcon], (err) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send('Something went wrong!');
                 }
-
-                res.redirect('/users/login?message=Account created successfully');
+                req.flash('success', 'Account created successfully');
+                res.redirect('/users/login');
             });
         });
     });
@@ -80,7 +85,8 @@ router.post('/login', (req, res) => {
 
     // Trim inputs and validate
     if (!email?.trim() || !password?.trim()) {
-        return res.redirect('/users/login?message=All fields are required');
+        req.flash('error', 'All fields are required');
+        return res.redirect('/users/login');
     }
 
     const trimmedEmail = email.trim().toLowerCase();
@@ -88,7 +94,8 @@ router.post('/login', (req, res) => {
 
     // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
-        return res.redirect('/users/login?message=Invalid email address');
+        req.flash('error', 'Invalid email address');
+        return res.redirect('/users/login');
     }
 
     const sql = 'SELECT * FROM users WHERE email = ?';
@@ -99,7 +106,8 @@ router.post('/login', (req, res) => {
         }
 
         if (results.length === 0) {
-            return res.redirect('/users/login?message=Invalid credentials');
+            req.flash('error', 'Invalid credentials');
+            return res.redirect('/users/login');
         }
 
         const user = results[0];
@@ -111,7 +119,8 @@ router.post('/login', (req, res) => {
             }
 
             if (!isMatch) {
-                return res.redirect('/users/login?message=Invalid credentials');
+                req.flash('error', 'Invalid credentials');
+                return res.redirect('/users/login');
             }
 
             // Store user details in session
@@ -133,12 +142,26 @@ router.post('/profile/update', (req, res) => {
     const userId = req.session.user.id;
 
     if (!username || !email) {
-        return res.redirect('/profile?message=All fields are required');
+        req.flash('error', 'All fields are required');
+        return res.redirect('/profile');
     }
 
     const trimmedUsername = validator.trim(username);
     const trimmedEmail = validator.trim(email).toLowerCase();
     const icon = selected_icon?.trim() || null;
+
+    // Validate username
+    if (!validator.isLength(trimmedUsername, { min: 3, max: 20 }) ||
+        !validator.isAlphanumeric(trimmedUsername, 'en-US', { ignore: '_' })) {
+        req.flash('error', 'Username must be 3-20 characters and can only contain letters, numbers, and underscores');
+        return res.redirect('/profile');
+    }
+
+    // Validate email
+    if (!validator.isEmail(trimmedEmail)) {
+        req.flash('error', 'Invalid email address');
+        return res.redirect('/profile');
+    }
 
     // Check if new email is already taken by another user
     const checkEmailSQL = 'SELECT id FROM users WHERE email = ? AND id != ?';
@@ -149,7 +172,8 @@ router.post('/profile/update', (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.redirect('/profile?message=Email already in use');
+            req.flash('error', 'Email already in use');
+            return res.redirect('/profile');
         }
 
         const updateSQL = 'UPDATE users SET username = ?, email = ?, profileIcon = ? WHERE id = ?';
@@ -164,7 +188,8 @@ router.post('/profile/update', (req, res) => {
             req.session.user.email = trimmedEmail;
             req.session.user.profileIcon = icon;
 
-            res.redirect('/profile?message=Profile updated successfully');
+            req.flash('success', 'Profile updated successfully');
+            res.redirect('/profile');
         });
     });
 });
@@ -179,6 +204,7 @@ router.post('/logout', (req, res) => {
         }
 
         // Redirect to the homepage or login page after logging out
+        req.flash('success', 'You have logged out');
         res.redirect('/');
     });
 });

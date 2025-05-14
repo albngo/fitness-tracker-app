@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import flash from 'express-flash';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import workoutRoutes from './routes/workout.js';
@@ -21,6 +22,8 @@ app.use(session({
     saveUninitialized: false, // Only save session when user logs in
     cookie: { secure: false } // Set to true for HTTPS in production
 }));
+
+app.use(flash());
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));

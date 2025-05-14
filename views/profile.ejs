@@ -8,6 +8,14 @@
 </head>
 <body>
 
+
+<% if (messages.success) { %>
+    <div class="flash success"><%= messages.success %></div>
+<% } %>
+<% if (messages.error) { %>
+    <div class="flash error"><%= messages.error %></div>
+<% } %>
+
 <!-- Navbar -->
 <nav>
     <div class="hamburger" onclick="toggleMenu()">
@@ -64,35 +72,18 @@
         <div class="icon-selection">
             <h3>Choose Your Icon</h3>
             <div class="icons">
-                <input type="radio" id="icon1" name="icon" value="avatarblack.png" />
-                <label for="icon1">
-                    <img src="/avatarblack.png" alt="Icon 1" class="icon-option" />
-                </label>
-
-                <input type="radio" id="icon2" name="icon" value="avatarblue.png" />
-                <label for="icon2">
-                    <img src="/avatarblue.png" alt="Icon 2" class="icon-option" />
-                </label>
-
-                <input type="radio" id="icon3" name="icon" value="avatargreen.png" />
-                <label for="icon3">
-                    <img src="/avatargreen.png" alt="Icon 3" class="icon-option" />
-                </label>
-
-                <input type="radio" id="icon4" name="icon" value="avatarorange.png" />
-                <label for="icon4">
-                    <img src="/avatarorange.png" alt="Icon 4" class="icon-option" />
-                </label>
-
-                <input type="radio" id="icon5" name="icon" value="avatarred.png" />
-                <label for="icon5">
-                    <img src="/avatarred.png" alt="Icon 5" class="icon-option" />
-                </label>
-
-                <input type="radio" id="icon6" name="icon" value="avataryellow.png" />
-                <label for="icon6">
-                    <img src="/avataryellow.png" alt="Icon 6" class="icon-option" />
-                </label>
+                <% icons.forEach((icon, index) => { %>
+                    <input 
+                        type="radio" 
+                        id="icon<%= index %>" 
+                        name="icon" 
+                        value="<%= icon %>" 
+                        <%= user.profileIcon === icon ? 'checked' : '' %>
+                    />
+                    <label for="icon<%= index %>">
+                        <img src="/<%= icon %>" alt="Icon <%= index + 1 %>" class="icon-option" />
+                    </label>
+                <% }) %>
             </div>
         </div>
 

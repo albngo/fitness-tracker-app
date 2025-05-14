@@ -29,8 +29,18 @@ router.get('/', (req, res) => {
         }
 
         const user = results[0];
+
+        const icons = [
+            'avatarblack.png',
+            'avatarblue.png',
+            'avatargreen.png',
+            'avatarorange.png',
+            'avatarred.png',
+            'avataryellow.png'
+        ];
+
         // Render the profile page with user data
-        res.render('profile', { user });
+        res.render('profile', { user,icons });
     });
 });
 

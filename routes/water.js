@@ -39,6 +39,13 @@ router.post('/log', (req, res) => {
     const { amount_ml } = req.body;
     const userId = req.session.user.id;
 
+    // Validate the input
+    if (!amount_ml || isNaN(amount_ml) || Number(amount_ml) <= 0 || Number(amount_ml) > 10000) {
+        req.flash('error', 'Please enter a valid amount of water in millilitres.');
+        return res.redirect('/water');
+    }
+
+    // Check if the user is logged in
     if (!userId) {
         console.log('User not logged in. Redirecting to login.');
         return res.redirect('/users/login');
@@ -51,6 +58,7 @@ router.post('/log', (req, res) => {
             return res.status(500).send('Something went wrong with logging the water intake!');
         }
 
+        req.flash('success', 'Water intake logged successfully');
         console.log('Water intake logged successfully:', result);
         res.redirect('/water'); // Redirect back to the water tracker page
     });
