@@ -91,7 +91,7 @@
     <!-- Daily Goal Progress Bar -->
     <h2>Today's Water Intake</h2>
     <div class="progress-bar-container">
-        <div class="progress-bar-fill" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
+        <div id="progress-bar" class="progress-bar-fill" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
             <%= percentage %>% (<%= waterTotal %> / <%= waterGoal %> ml)
         </div>
     </div>
@@ -125,12 +125,6 @@
                 todayTotal += log.amount_ml;
             }
         });
-
-        // Update Progress Bar
-        const progress = Math.min((todayTotal / dailyGoal) * 100, 100); // Cap at 100%
-        const progressBar = document.getElementById('progress-bar');
-        progressBar.style.width = progress + '%';
-        progressBar.textContent = `${Math.round(progress)}% (${todayTotal} ml)`;
 
         // Prepare Data for Chart
         const dates = [];
