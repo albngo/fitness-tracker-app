@@ -197,6 +197,9 @@ router.post('/profile/update', (req, res) => {
 
 // Route to handle logout
 router.post('/logout', (req, res) => {
+
+    req.flash('success', 'You have logged out');
+
     req.session.destroy((err) => {
         if (err) {
             console.error('Error destroying session:', err);
@@ -204,7 +207,6 @@ router.post('/logout', (req, res) => {
         }
 
         // Redirect to the homepage or login page after logging out
-        req.flash('success', 'You have logged out');
         res.redirect('/');
     });
 });
