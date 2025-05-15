@@ -488,3 +488,33 @@ body.dark .progress-bar-fill {
 body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.settings-list {
+    list-style: none;
+    padding: 0;
+}
+
+.settings-list li {
+    margin-bottom: 1rem;
+}
+
+.delete-account {
+    background-color: #d9534f;
+}
+
+.delete-account:hover {
+    background-color: #c9302c;
+}
+
+body.dark .delete-account {
+    background-color: #a94442;
+}
+
+body.dark .delete-account:hover {
+    background-color: #922d2d;
+}

@@ -14,99 +14,89 @@
 <% } %>
 <% if (messages.error) { %>
     <div class="flash error"><%= messages.error %></div>
-<% } %>    
+<% } %>
 
 <!-- Navbar -->
-    <nav>
-        <div class="hamburger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        
-        <ul>
-            <li><a href="/" class="nav-link">Home</a></li>
-            <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
-
-            <!-- Fitness Dropdown Button -->
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
-                <div class="dropdown-content">
-                    <a href="/workout" class="dropdown-item">Generate Workout</a>
-                    <a href="/water" class="dropdown-item">Water Tracker</a>
-                    <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
-                </div>
-            </li>
-
-            <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
-            <li><a href="/settings" class="nav-link">Settings</a></li>
-
-            <!-- User Icon -->
-            <% if (user) { %>
-                <li class="user-icon">
-                    <a href="/profile">
-                        <span><%= user.username %></span>
-                        <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
-                    </a>
-                </li>
-            <% } else { %>
-                <li><a href="/users/login" class="nav-link">Login</a></li>
-                <li><a href="/users/register" class="nav-link">Sign Up</a></li>
-            <% } %>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h2>Settings</h2>
-        <form action="/settings/update" method="POST">
-            <ul class="settings-list">
-                <!-- Dark Mode / Light Mode Toggle -->
-                <li>
-                    <label for="theme">Theme:</label>
-                    <select name="theme" id="theme">
-                        <option value="light" <%= theme === 'light' ? 'selected' : '' %>>Light Mode</option>
-                        <option value="dark" <%= theme === 'dark' ? 'selected' : '' %>>Dark Mode</option>
-                    </select>
-                </li>
-
-               <!-- Font Preference (Normal/Dyslexia-friendly) -->
-                <li>
-                    <form action="/settings/update" method="POST">
-                        <label for="fontPref">Font Preference:</label>
-                        <select name="fontPref" id="fontPref">
-                            <option value="default" <%= fontPref === 'default' ? 'selected' : '' %>>Normal</option>
-                            <option value="dyslexic" <%= fontPref === 'dyslexic' ? 'selected' : '' %>>Dyslexia-friendly</option>
-                        </select>
-                    </form>
-                </li>
-
-                <!-- Delete Account -->
-                <li>
-                    <button type="submit" class="delete-account">Update Settings</button>
-                </li>
-            </ul>
-        </form>
-
-        <!-- Account Deletion -->
-        <form action="/settings/delete-account" method="POST">
-            <button type="submit" class="delete-account">Delete Account</button>
-        </form>
-
-        <% if (messages.success) { %>
-            <div class="flash-message success"><%= messages.success %></div>
-        <% } %>
+<nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
-    <!-- JavaScript for dropdown toggle -->
-<script>
-    function toggleDropdown() {
-        var dropdown = document.querySelector('.dropdown');
-        dropdown.classList.toggle('active');
-    }
+    <ul>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
 
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+            <div class="dropdown-content">
+                <a href="/workout" class="dropdown-item">Generate Workout</a>
+                <a href="/water" class="dropdown-item">Water Tracker</a>
+                <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+            </div>
+        </li>
+
+        <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+
+        <% if (user) { %>
+            <li class="user-icon">
+                <a href="/profile">
+                    <span><%= user.username %></span>
+                    <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
+                </a>
+            </li>
+        <% } else { %>
+            <li><a href="/users/login" class="nav-link">Login</a></li>
+            <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>
+
+
+<div class="container">
+<h1>Settings</h1>
+    <!-- Update Theme and Font Preference -->
+    <form action="/settings/update" method="POST">
+        <ul class="settings-list">
+            <li>
+                <label for="theme">Theme:</label>
+                <select name="theme" id="theme">
+                    <option value="light" <%= theme === 'light' ? 'selected' : '' %>>Light Mode</option>
+                    <option value="dark" <%= theme === 'dark' ? 'selected' : '' %>>Dark Mode</option>
+                </select>
+            </li>
+
+            <li>
+                <label for="fontPref">Font Preference:</label>
+                <select name="fontPref" id="fontPref">
+                    <option value="default" <%= fontPref === 'default' ? 'selected' : '' %>>Normal</option>
+                    <option value="dyslexic" <%= fontPref === 'dyslexic' ? 'selected' : '' %>>Dyslexia-friendly</option>
+                </select>
+            </li>
+
+            <li>
+                <button type="submit">Update Settings</button>
+            </li>
+        </ul>
+    </form>
+
+    <!-- Account Deletion -->
+    <form action="/settings/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+        <button type="submit" class="delete-account">Delete Account</button>
+    </form>
+</div>
+
+<script>
     function toggleMenu() {
         const navList = document.querySelector('nav ul');
         navList.classList.toggle('active');
+    }
+
+    function toggleDropdown() {
+        const dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
     }
 </script>
 
