@@ -3,12 +3,14 @@ import session from 'express-session';
 import flash from 'express-flash';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import db from './config/db.js';
 import workoutRoutes from './routes/workout.js';
 import userRoutes from './routes/users.js';
 import waterRoutes from './routes/water.js';
 import sleepRoutes from './routes/sleep.js';
 import profileRouter from './routes/profile.js';
 import dashRoutes from './routes/dash.js';
+import settingsRoutees from './routes/settings.js';
 
 // Define __filename and __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -38,11 +40,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session middleware to add req.user
-app.use((req, res, next) => {
-    res.locals.user = req.session.user || null; // Make user globally available in templates
-    next();
-});
+app.use(async (req, res, next) => {
+    res.locals.user = req.session.user || null;
 
+    if (req.session.user && req.session.user.id) {
+        const userId = req.session.user.id;
+        const sql = 'SELECT theme, font_pref FROM users WHERE id = ?';
+        db.query(sql, [userId], (err, results) => {
+            if (err) {
+                console.error('Error fetching user settings:', err);
+                res.locals.theme = 'light';
+                res.locals.fontPref = 'default';
+            } else {
+                res.locals.theme = results[0].theme || 'light';
+                res.locals.fontPref = results[0].font_pref || 'default';
+            }
+            next();
+        });
+    } else {
+        res.locals.theme = 'light';
+        res.locals.fontPref = 'default';
+        next();
+    }
+});
 
 // Set up routes
 app.use('/workout', workoutRoutes);
@@ -51,6 +71,7 @@ app.use('/water', waterRoutes);
 app.use('/sleep', sleepRoutes);
 app.use('/profile', profileRouter);
 app.use('/dashboard', dashRoutes);
+app.use('/settings', settingsRoutees);
 
 // FAQ route
 app.get('/faq', (req, res) => {

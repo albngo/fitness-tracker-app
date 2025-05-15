@@ -6,8 +6,9 @@
     <title>Fitness Tracker - Home</title>
     <!-- Link to the main.css file -->
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
 </head>
-<body>
+<body class="<%= theme %> <%= fontPref %>">
 
 <% if (messages.success) { %>
     <div class="flash success"><%= messages.success %></div>
