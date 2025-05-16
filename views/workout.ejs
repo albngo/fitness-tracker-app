@@ -6,6 +6,7 @@
     <title>Fitness Tracker - Workout Generator</title>
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
@@ -56,160 +57,252 @@
     </ul>
 </nav>
 
-    <header>
-        <h1>Workout Generator</h1>
+<div class="workout-container">
+    <header class="workout-header">
+        <h1><i class="fas fa-dumbbell"></i> Workout Generator</h1>
+        <p class="subtitle">Customize and generate your perfect workout routine</p>
     </header>
 
-    <main>
-        <form action="/workout/generate" method="POST">
-            <label for="type">Target Muscles</label>
-            <p>Select one or more muscle groups:</p>
-            <div>
-                <input type="checkbox" name="type" value="abdominals" id="abdominals">
-                <label for="abdominals">Abdominals</label>
+    <div class="workout-grid">
+        <!-- Workout Generator Form Card -->
+        <div class="workout-card">
+            <div class="card-header">
+                <i class="fas fa-sliders"></i>
+                <h2>Customize Your Workout</h2>
             </div>
-            <div>
-                <input type="checkbox" name="type" value="abductors" id="abductors">
-                <label for="abductors">Abductors</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="adductors" id="adductors">
-                <label for="adductors">Adductors</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="biceps" id="biceps">
-                <label for="biceps">Biceps</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="calves" id="calves">
-                <label for="calves">Calves</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="chest" id="chest">
-                <label for="chest">Chest</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="forearms" id="forearms">
-                <label for="forearms">Forearms</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="glutes" id="glutes">
-                <label for="glutes">Glutes</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="hamstrings" id="hamstrings">
-                <label for="hamstrings">Hamstrings</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="lats" id="lats">
-                <label for="lats">Lats</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="lower_back" id="lower_back">
-                <label for="lower_back">Lower Back</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="middle_back" id="middle_back">
-                <label for="middle_back">Middle Back</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="neck" id="neck">
-                <label for="neck">Neck</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="quadriceps" id="quadriceps">
-                <label for="quadriceps">Quadriceps</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="traps" id="traps">
-                <label for="traps">Traps</label>
-            </div>
-            <div>
-                <input type="checkbox" name="type" value="triceps" id="triceps">
-                <label for="triceps">Triceps</label>
-            </div>
-            <br>
-        
-            <label for="difficulty">Difficulty Level</label>
-            <select name="difficulty" id="difficulty">
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="expert">Expert</option>
-            </select>
-            <br>
-        
-            <label for="exerciseType">Exercise Type</label>
-            <select name="exerciseType" id="exerciseType">
-                <option value="strength">Strength</option>
-                <option value="cardio">Cardio</option>
-                <option value="olympic_weightlifting">Olympic Weightlifting</option>
-                <option value="plyometrics">Plyometrics</option>
-                <option value="powerlifting">Powerlifting</option>
-                <option value="stretching">Stretching</option>
-                <option value="strongman">Strongman</option>
-            </select>
-            <br>
-        
-            <label for="showInstructions">Show Exercise Instructions</label>
-            <input type="checkbox" name="showInstructions" id="showInstructions" value="true">
-            <br>
-        
-            <button type="submit">Generate Workout</button>
-        </form>        
+            <div class="card-content">
+                <form action="/workout/generate" method="POST" class="workout-form">
+                    <!-- Muscle Groups Section -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-ninja"></i> Target Muscles</h3>
+                        <p class="section-hint">Select one or more muscle groups:</p>
+                        <div class="muscle-grid">
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="abdominals" id="abdominals">
+                                <label for="abdominals">
+                                    <i class="fas fa-child"></i>
+                                    <span>Abdominals</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="biceps" id="biceps">
+                                <label for="biceps">
+                                    <i class="fas fa-hand-rock"></i>
+                                    <span>Biceps</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="chest" id="chest">
+                                <label for="chest">
+                                    <i class="fas fa-user"></i>
+                                    <span>Chest</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="forearms" id="forearms">
+                                <label for="forearms">
+                                    <i class="fas fa-hand-fist"></i>
+                                    <span>Forearms</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="glutes" id="glutes">
+                                <label for="glutes">
+                                    <i class="fas fa-walking"></i>
+                                    <span>Glutes</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="hamstrings" id="hamstrings">
+                                <label for="hamstrings">
+                                    <i class="fas fa-running"></i>
+                                    <span>Hamstrings</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="lats" id="lats">
+                                <label for="lats">
+                                    <i class="fas fa-arrows-alt-h"></i>
+                                    <span>Lats</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="lower_back" id="lower_back">
+                                <label for="lower_back">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>Lower Back</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="middle_back" id="middle_back">
+                                <label for="middle_back">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                    <span>Middle Back</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="quadriceps" id="quadriceps">
+                                <label for="quadriceps">
+                                    <i class="fas fa-walking"></i>
+                                    <span>Quadriceps</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="traps" id="traps">
+                                <label for="traps">
+                                    <i class="fas fa-sort-up"></i>
+                                    <span>Traps</span>
+                                </label>
+                            </div>
+                            <div class="muscle-option">
+                                <input type="checkbox" name="type" value="triceps" id="triceps">
+                                <label for="triceps">
+                                    <i class="fas fa-hand-peace"></i>
+                                    <span>Triceps</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Generated Workout Section -->
-        <h1>Generated Workout</h1>
-        <div id="generated-workout">
-            <% if (workout && workout.length > 0) { %>
-                <% workout.forEach(group => { %>
-                    <h2>Workout Plan for <%= group.muscle %></h2>
-                    <ul>
-                        <% group.exercises.forEach(exercise => { %>
-                            <li>
-                                <strong><%= exercise.name %></strong><br>
-                                <strong>Type:</strong> <%= exercise.type %><br>
-                                <strong>Difficulty:</strong> <%= exercise.difficulty %><br>
-                                <strong>Target Muscle:</strong> <%= exercise.muscle %><br>
-                                <strong>Sets:</strong> <%= exercise.sets %><br>
-                                <strong>Reps:</strong> <%= exercise.reps %><br>
-                                <strong>Rest:</strong> <%= exercise.rest %><br>
-                                <% if (exercise.instructions && exercise.instructions.trim() !== "") { %>
-                                    <strong>Instructions:</strong> <%= exercise.instructions %><br>
-                                <% } else { %>
-                                    <strong>Instructions:</strong> No instructions available.<br>
-                                <% } %>
-                            </li>
-                        <% }); %>
-                    </ul>
-                <% }); %>
-            <% } else { %>
-                <p><%= error || "No workout generated." %></p>
-            <% } %>
+                    <!-- Workout Preferences Section -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-cog"></i> Workout Preferences</h3>
+                        
+                        <div class="preference-group">
+                            <label for="difficulty">
+                                <i class="fas fa-chart-line"></i>
+                                Difficulty Level
+                            </label>
+                            <select name="difficulty" id="difficulty" class="preference-select">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+
+                        <div class="preference-group">
+                            <label for="exerciseType">
+                                <i class="fas fa-running"></i>
+                                Exercise Type
+                            </label>
+                            <select name="exerciseType" id="exerciseType" class="preference-select">
+                                <option value="strength">Strength</option>
+                                <option value="cardio">Cardio</option>
+                                <option value="olympic_weightlifting">Olympic Weightlifting</option>
+                                <option value="plyometrics">Plyometrics</option>
+                                <option value="powerlifting">Powerlifting</option>
+                                <option value="stretching">Stretching</option>
+                                <option value="strongman">Strongman</option>
+                            </select>
+                        </div>
+
+                        <div class="preference-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="showInstructions" id="showInstructions" value="true">
+                                <i class="fas fa-list-ul"></i>
+                                Show Exercise Instructions
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="generate-workout-btn">
+                        <i class="fas fa-play-circle"></i>
+                        Generate Workout
+                    </button>
+                </form>
+            </div>
         </div>
-    </main>
 
-    <footer>
-        <p>Fitness Tracker &copy; 2025</p>
-    </footer>
+        <!-- Generated Workout Card -->
+        <div class="workout-card" id="generated-workout">
+            <div class="card-header">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>Generated Workout</h2>
+            </div>
+            <div class="card-content">
+                <% if (workout && workout.length > 0) { %>
+                    <div class="workout-plans">
+                        <% workout.forEach(group => { %>
+                            <div class="workout-group">
+                                <h3 class="group-title">
+                                    <i class="fas fa-bullseye"></i>
+                                    Workout Plan for <%= group.muscle %>
+                                </h3>
+                                <div class="exercises-list">
+                                    <% group.exercises.forEach(exercise => { %>
+                                        <div class="exercise-card">
+                                            <div class="exercise-header">
+                                                <h4><%= exercise.name %></h4>
+                                                <span class="exercise-type"><%= exercise.type %></span>
+                                            </div>
+                                            <div class="exercise-details">
+                                                <div class="detail-item">
+                                                    <i class="fas fa-signal"></i>
+                                                    <span>Difficulty: <%= exercise.difficulty %></span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-bullseye"></i>
+                                                    <span>Target: <%= exercise.muscle %></span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-redo"></i>
+                                                    <span>Sets: <%= exercise.sets %></span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-repeat"></i>
+                                                    <span>Reps: <%= exercise.reps %></span>
+                                                </div>
+                                                <div class="detail-item">
+                                                    <i class="fas fa-clock"></i>
+                                                    <span>Rest: <%= exercise.rest %></span>
+                                                </div>
+                                            </div>
+                                            <% if (exercise.instructions && exercise.instructions.trim() !== "") { %>
+                                                <div class="exercise-instructions">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <p><%= exercise.instructions %></p>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <i class="fas fa-dumbbell"></i>
+                        <p><%= error || "No workout generated yet. Use the form to create your perfect workout!" %></p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script>
-        function toggleDropdown() {
-            var dropdown = document.querySelector('.dropdown');
-            dropdown.classList.toggle('active');
+<footer>
+    <p>Fitness Tracker &copy; 2025</p>
+</footer>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
+
+    // Scroll to workout section if it exists and has content
+    window.onload = () => {
+        const workoutSection = document.getElementById('generated-workout');
+        const workoutContent = document.querySelector('.workout-plans');
+        if (workoutSection && workoutContent) {
+            workoutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-
-        // Scroll to the workout section if it exists
-        window.onload = () => {
-            const workoutSection = document.getElementById('generated-workout');
-            if (workoutSection && workoutSection.innerHTML.trim() !== "") {
-                workoutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        };
-
-        function toggleMenu() {
-            const navList = document.querySelector('nav ul');
-            navList.classList.toggle('active');
-        }
-    </script>
+    };
+</script>
 </body>
 </html>
