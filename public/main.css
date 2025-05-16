@@ -2742,3 +2742,366 @@ body.dark .empty-state {
     }
 }
 
+/* Sleep Tracker Styles */
+.sleep-tracker-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.sleep-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.sleep-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.sleep-header h1 i {
+    color: #9370DB;
+}
+
+.sleep-header .subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.sleep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.sleep-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.sleep-card .card-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sleep-card .card-header i {
+    font-size: 1.5rem;
+    color: #9370DB;
+}
+
+.sleep-card .card-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.sleep-card .card-content {
+    padding: 1.5rem;
+}
+
+/* Sleep Stats Card Styles */
+.sleep-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: #9370DB;
+    margin-bottom: 0.5rem;
+}
+
+.stat-info .stat-label {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.stat-info .stat-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Sleep Log Form Styles */
+.sleep-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.time-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.time-input input {
+    width: 100%;
+    padding: 0.75rem;
+    padding-right: 3rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.time-input .unit {
+    position: absolute;
+    right: 1rem;
+    color: #666;
+}
+
+.quality-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.quality-selector input[type="radio"] {
+    display: none;
+}
+
+.quality-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quality-option:hover {
+    background: #e0e0e0;
+}
+
+.quality-option i {
+    font-size: 1.5rem;
+}
+
+.quality-selector input[type="radio"]:checked + .quality-option {
+    background: #9370DB;
+    color: white;
+}
+
+.quality-selector input[type="radio"]:checked + .quality-option i {
+    color: white;
+}
+
+.log-sleep-btn {
+    padding: 0.75rem 1.5rem;
+    background: #9370DB;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.log-sleep-btn:hover {
+    background: #8A2BE2;
+}
+
+/* Sleep Logs Table Styles */
+.logs-table-container {
+    overflow-x: auto;
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.logs-table th,
+.logs-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.logs-table th {
+    font-weight: 600;
+    color: #333;
+}
+
+.logs-table td {
+    color: #666;
+}
+
+.quality-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.quality-indicator.poor {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.quality-indicator.fair {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.quality-indicator.good {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.quality-indicator.excellent {
+    background: rgba(147, 112, 219, 0.1);
+    color: #9370DB;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #9370DB;
+    margin-bottom: 1rem;
+}
+
+/* Dark Mode Adjustments */
+body.dark .sleep-header h1 {
+    color: #f0f0f0;
+}
+
+body.dark .sleep-header .subtitle {
+    color: #aaa;
+}
+
+body.dark .sleep-card {
+    background: #1e1e1e;
+}
+
+body.dark .sleep-card .card-header {
+    border-bottom-color: #333;
+}
+
+body.dark .sleep-card .card-header h2 {
+    color: #f0f0f0;
+}
+
+body.dark .stat-item {
+    background: #2a2a2a;
+}
+
+body.dark .stat-info .stat-label {
+    color: #aaa;
+}
+
+body.dark .stat-info .stat-value {
+    color: #f0f0f0;
+}
+
+body.dark .time-input input {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #f0f0f0;
+}
+
+body.dark .time-input .unit {
+    color: #aaa;
+}
+
+body.dark .quality-option {
+    background: #2a2a2a;
+    color: #f0f0f0;
+}
+
+body.dark .quality-option:hover {
+    background: #333;
+}
+
+body.dark .logs-table th {
+    color: #f0f0f0;
+}
+
+body.dark .logs-table td {
+    color: #aaa;
+    border-bottom-color: #333;
+}
+
+body.dark .empty-state {
+    color: #aaa;
+}
+
+body.dark .quality-indicator.poor {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+body.dark .quality-indicator.fair {
+    background: rgba(255, 193, 7, 0.2);
+}
+
+body.dark .quality-indicator.good {
+    background: rgba(40, 167, 69, 0.2);
+}
+
+body.dark .quality-indicator.excellent {
+    background: rgba(147, 112, 219, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sleep-tracker-container {
+        margin: 1rem auto;
+    }
+
+    .sleep-header h1 {
+        font-size: 2rem;
+    }
+
+    .sleep-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sleep-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .quality-selector {
+        grid-template-columns: 1fr;
+    }
+}
+

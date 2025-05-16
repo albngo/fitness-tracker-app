@@ -6,10 +6,12 @@
     <title>Fitness Tracker - Sleep Tracker</title>
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
+<!-- Flash Messages -->
 <% if (messages.success) { %>
     <div class="flash success"><%= messages.success %></div>
 <% } %>
@@ -35,7 +37,7 @@
             <div class="dropdown-content">
                 <a href="/workout" class="dropdown-item">Generate Workout</a>
                 <a href="/water" class="dropdown-item">Water Tracker</a>
-                <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+                <a href="/sleep" class="dropdown-item active">Sleep Tracker</a>
             </div>
         </li>
 
@@ -56,111 +58,290 @@
         <% } %>
     </ul>
 </nav>
+
+<div class="sleep-tracker-container">
+    <div class="sleep-header">
+        <h1><i class="fas fa-moon"></i> Sleep Tracker</h1>
+        <p class="subtitle">Monitor your sleep patterns for better rest</p>
+    </div>
+
+    <div class="sleep-grid">
+        <!-- Sleep Stats Card -->
+        <div class="sleep-card stats-card">
+            <div class="card-header">
+                <i class="fas fa-chart-line"></i>
+                <h2>Sleep Statistics</h2>
+            </div>
+            <div class="card-content">
+                <div class="sleep-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Average Sleep</span>
+                            <span class="stat-value" id="avgSleep">Calculating...</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Sleep Quality</span>
+                            <span class="stat-value" id="avgQuality">Calculating...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log Sleep Card -->
+        <div class="sleep-card log-card">
+            <div class="card-header">
+                <i class="fas fa-plus-circle"></i>
+                <h2>Log Sleep</h2>
+            </div>
+            <div class="card-content">
+                <form action="/sleep/log" method="POST" class="sleep-form">
+                    <div class="form-group">
+                        <label for="sleep_hours">Hours</label>
+                        <div class="time-input">
+                            <input 
+                                type="number" 
+                                id="sleep_hours" 
+                                min="0" 
+                                max="24" 
+                                value="8"
+                                oninput="updateMinutes()"
+                            >
+                            <span class="unit">hrs</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sleep_minutes">Minutes</label>
+                        <div class="time-input">
+                            <input 
+                                type="number" 
+                                id="sleep_minutes" 
+                                min="0" 
+                                max="59" 
+                                value="0"
+                                oninput="updateMinutes()"
+                            >
+                            <span class="unit">min</span>
+                        </div>
+                    </div>
+                    <input 
+                        type="hidden" 
+                        id="sleep_duration_minutes" 
+                        name="sleep_duration_minutes"
+                        value="480"
+                    >
+                    <div class="form-group">
+                        <label for="sleep_quality">Sleep Quality</label>
+                        <div class="quality-selector">
+                            <input type="radio" id="poor" name="sleep_quality" value="poor">
+                            <label for="poor" class="quality-option">
+                                <i class="fas fa-face-frown"></i>
+                                Poor
+                            </label>
+                            
+                            <input type="radio" id="fair" name="sleep_quality" value="fair">
+                            <label for="fair" class="quality-option">
+                                <i class="fas fa-face-meh"></i>
+                                Fair
+                            </label>
+                            
+                            <input type="radio" id="good" name="sleep_quality" value="good" checked>
+                            <label for="good" class="quality-option">
+                                <i class="fas fa-face-smile"></i>
+                                Good
+                            </label>
+                            
+                            <input type="radio" id="excellent" name="sleep_quality" value="excellent">
+                            <label for="excellent" class="quality-option">
+                                <i class="fas fa-face-laugh"></i>
+                                Excellent
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="log-sleep-btn">
+                        <i class="fas fa-plus"></i>
+                        Log Sleep
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sleep History Chart -->
+        <div class="sleep-card chart-card">
+            <div class="card-header">
+                <i class="fas fa-chart-bar"></i>
+                <h2>Sleep History</h2>
+            </div>
+            <div class="card-content">
+                <canvas id="sleepChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Logs Card -->
+        <div class="sleep-card logs-card">
+            <div class="card-header">
+                <i class="fas fa-history"></i>
+                <h2>Recent Logs</h2>
+            </div>
+            <div class="card-content">
+                <% if (sleepLogs && sleepLogs.length > 0) { %>
+                    <div class="logs-table-container">
+                        <table class="logs-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                    <th>Quality</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% sleepLogs.slice(0, 5).forEach(log => { %>
+                                    <tr>
+                                        <td><%= new Date(log.date).toLocaleDateString() %></td>
+                                        <td>
+                                            <%= Math.floor(log.sleep_duration_minutes / 60) %>h 
+                                            <%= log.sleep_duration_minutes % 60 %>m
+                                        </td>
+                                        <td>
+                                            <span class="quality-indicator <%= log.sleep_quality.toLowerCase() %>">
+                                                <%= log.sleep_quality %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <i class="fas fa-bed"></i>
+                        <p>No sleep logs found. Start tracking your sleep!</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
+
+    function updateMinutes() {
+        const hours = parseInt(document.getElementById('sleep_hours').value) || 0;
+        const minutes = parseInt(document.getElementById('sleep_minutes').value) || 0;
+        const totalMinutes = (hours * 60) + minutes;
+        document.getElementById('sleep_duration_minutes').value = totalMinutes;
+    }
+
+    // Sleep logs data
+    const sleepLogs = JSON.parse('<%- JSON.stringify(sleepLogs) %>');
     
-    <h1>Sleep Tracker</h1>
+    // Calculate average sleep duration and quality
+    if (sleepLogs.length > 0) {
+        const avgDuration = sleepLogs.reduce((sum, log) => sum + log.sleep_duration_minutes, 0) / sleepLogs.length;
+        const hours = Math.floor(avgDuration / 60);
+        const minutes = Math.round(avgDuration % 60);
+        document.getElementById('avgSleep').textContent = `${hours}h ${minutes}m`;
 
-    <!-- Form to log sleep data -->
-    <form action="/sleep/log" method="POST">
-        <label for="sleep_duration_minutes">Enter Sleep Duration (minutes):</label>
-        <input type="number" id="sleep_duration_minutes" name="sleep_duration_minutes" required>
-        <label for="sleep_quality">Sleep Quality:</label>
-        <select id="sleep_quality" name="sleep_quality" required>
-            <option value="poor">Poor</option>
-            <option value="fair">Fair</option>
-            <option value="good">Good</option>
-            <option value="excellent">Excellent</option>
-        </select>
-        <button type="submit">Log Sleep</button>
-    </form>
+        const qualityMap = { poor: 1, fair: 2, good: 3, excellent: 4 };
+        const avgQualityScore = sleepLogs.reduce((sum, log) => sum + qualityMap[log.sleep_quality], 0) / sleepLogs.length;
+        let qualityText = 'Poor';
+        if (avgQualityScore >= 3.5) qualityText = 'Excellent';
+        else if (avgQualityScore >= 2.5) qualityText = 'Good';
+        else if (avgQualityScore >= 1.5) qualityText = 'Fair';
+        document.getElementById('avgQuality').textContent = qualityText;
+    }
 
-    <h2>Your Sleep Logs</h2>
-    <% if (sleepLogs && sleepLogs.length > 0) { %>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Duration (minutes)</th>
-                    <th>Quality</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% sleepLogs.forEach(log => { %>
-                    <tr>
-                        <td><%= new Date(log.date).toISOString().split('T')[0] %></td>
-                        <td><%= log.sleep_duration_minutes %></td>
-                        <td><%= log.sleep_quality %></td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    <% } else { %>
-        <p>No sleep logs found. Start logging your sleep!</p>
-    <% } %>
+    // Prepare data for chart
+    const last7Days = [...Array(7)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return d.toISOString().split('T')[0];
+    }).reverse();
 
-    <!-- Sleep History Chart -->
-    <h2>Sleep History (Last 7 Days)</h2>
-    <canvas id="sleepChart" width="400" height="200"></canvas>
+    const sleepData = last7Days.map(date => {
+        const dayLogs = sleepLogs.filter(log => 
+            new Date(log.date).toISOString().split('T')[0] === date
+        );
+        return dayLogs.reduce((sum, log) => sum + log.sleep_duration_minutes, 0) / 60; // Convert to hours
+    });
 
-    <!-- Footer (optional) -->
-    <footer>
-        <p>Fitness Tracker &copy; 2025</p>
-    </footer>
-
-    <script>
-        // JavaScript for dropdown toggle
-        function toggleDropdown() {
-            var dropdown = document.querySelector('.dropdown');
-            dropdown.classList.toggle('active');
-        }
-
-        // Pass the sleepLogs from the server to the script
-        const sleepLogs = <%- JSON.stringify(sleepLogs) %>; 
-
-        // Prepare data for the chart
-        const dates = [];
-        const durations = [];
-
-        sleepLogs.forEach(log => {
-            const dateObj = new Date(log.date);  // Convert to Date object
-            const dateStr = dateObj.toISOString().split('T')[0]; // Format date to 'YYYY-MM-DD'
-
-            // If the date is not already in the array, add it
-            if (!dates.includes(dateStr)) {
-                dates.push(dateStr);
-                durations.push(0); // Initialize sleep duration for this date
-            }
-
-            // Add the sleep duration for this date
-            durations[dates.indexOf(dateStr)] += log.sleep_duration_minutes;
-        });
-
-        // Create the chart
-        const ctx = document.getElementById('sleepChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: 'Sleep Duration (minutes)',
-                    data: durations,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
+    // Create Chart
+    const ctx = document.getElementById('sleepChart').getContext('2d');
+    const sleepChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: last7Days.map(date => {
+                const d = new Date(date);
+                return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+            }),
+            datasets: [{
+                label: 'Sleep Duration (hours)',
+                data: sleepData,
+                backgroundColor: 'rgba(147, 112, 219, 0.2)',
+                borderColor: 'rgba(147, 112, 219, 1)',
+                borderWidth: 2,
+                borderRadius: 5,
+                barThickness: 20
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    ticks: {
+                        callback: value => value + 'h'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
                     }
                 }
             }
-        });
-
-        function toggleMenu() {
-            const navList = document.querySelector('nav ul');
-            navList.classList.toggle('active');
         }
-    </script>
-</body> 
+    });
+
+    // Update chart colors based on theme
+    function updateChartTheme() {
+        const isDark = document.body.classList.contains('dark');
+        const textColor = isDark ? '#f0f0f0' : '#666';
+        
+        sleepChart.options.scales.y.ticks.color = textColor;
+        sleepChart.options.scales.x.ticks.color = textColor;
+        sleepChart.options.scales.y.grid.color = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        sleepChart.update();
+    }
+
+    // Call initially and whenever theme changes
+    updateChartTheme();
+</script>
+
+</body>
 </html>
