@@ -2391,7 +2391,7 @@ body.dark .terms-checkbox a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .water-header h1 i {
@@ -3102,5 +3102,323 @@ body.dark .quality-indicator.excellent {
 
     .quality-selector {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Workout Page Styles */
+.workout-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.workout-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.workout-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.workout-header .subtitle {
+    color: var(--text-light);
+    opacity: 0.8;
+    font-size: 1.1rem;
+}
+
+.workout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.workout-card {
+    background: var(--bg-light);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--standard-shadow);
+    overflow: hidden;
+    transition: var(--standard-transition);
+}
+
+.workout-card .card-header {
+    background: rgba(74, 144, 226, 0.1);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.workout-card .card-header i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.workout-card .card-content {
+    padding: 1.5rem;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.form-section .section-hint {
+    color: var(--text-light);
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+/* Muscle Grid */
+.muscle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.muscle-option {
+    position: relative;
+}
+
+.muscle-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.muscle-option label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    transition: var(--standard-transition);
+}
+
+.muscle-option label:hover {
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.muscle-option input[type="checkbox"]:checked + label {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Preference Groups */
+.preference-group {
+    margin-bottom: 1.5rem;
+}
+
+.preference-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.preference-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--button-border-radius);
+    background: var(--bg-light);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: var(--standard-transition);
+}
+
+.preference-select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+/* Generate Button */
+.generate-workout-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--button-border-radius);
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--standard-transition);
+}
+
+.generate-workout-btn:hover {
+    background: var(--primary-color-hover);
+}
+
+/* Generated Workout Styles */
+.workout-plans {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.workout-group {
+    border: 1px solid var(--border-light);
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+
+.group-title {
+    background: rgba(74, 144, 226, 0.1);
+    padding: 1rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.exercises-list {
+    padding: 1rem;
+}
+
+.exercise-card {
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+    border-radius: var(--button-border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.exercise-header h4 {
+    color: var(--text-light);
+    margin: 0;
+}
+
+.exercise-type {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.exercise-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+}
+
+.detail-item i {
+    color: var(--primary-color);
+}
+
+.exercise-instructions {
+    background: rgba(74, 144, 226, 0.1);
+    padding: 1rem;
+    border-radius: var(--button-border-radius);
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.exercise-instructions i {
+    color: var(--primary-color);
+    margin-top: 0.25rem;
+}
+
+.exercise-instructions p {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Dark Mode Adjustments */
+body.dark .workout-card {
+    background: var(--bg-dark);
+}
+
+body.dark .workout-card .card-header {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: var(--border-dark);
+}
+
+body.dark .muscle-option label {
+    border-color: var(--border-dark);
+}
+
+body.dark .muscle-option label:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .preference-select {
+    background: var(--bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+}
+
+body.dark .exercise-card {
+    background: var(--bg-dark);
+    border-color: var(--border-dark);
+}
+
+body.dark .exercise-type {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .exercise-instructions {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .workout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .muscle-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .exercise-details {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
