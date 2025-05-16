@@ -6,6 +6,7 @@
     <title>Fitness Tracker - Profile</title>
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
@@ -51,52 +52,105 @@
     </ul>
 </nav>
 
-<!-- Main content -->
-<div class="main-content">
-    <h1>Welcome to your profile</h1>
-    <p>Here you can view your account details and log out.</p>
+<!-- Profile Container -->
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-cover"></div>
+        <div class="profile-avatar">
+            <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="Profile Picture" class="profile-picture" />
+            <h1><%= user.username %>'s Profile</h1>
+        </div>
+    </div>
 
-    <p>Username: <%= user.username %></p>
-    <p>Email: <%= user.email %></p>
+    <div class="profile-content">
+        <div class="profile-grid">
+            <!-- Account Information Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h2>Account Information</h2>
+                </div>
+                <form action="/users/profile/update" method="POST" class="profile-form">
+                    <input type="hidden" name="selected_icon" id="selected_icon" />
+                    
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i>
+                            Username
+                        </label>
+                        <input type="text" name="username" id="username" value="<%= user.username %>" required />
+                    </div>
 
-    <form action="/users/profile/update" method="POST">
-        <input type="hidden" name="selected_icon" id="selected_icon" />
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input type="email" name="email" id="email" value="<%= user.email %>" required />
+                    </div>
 
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" value="<%= user.username %>" required />
+                    <button type="submit" class="profile-button primary">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </form>
+            </div>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="<%= user.email %>" required />
+            <!-- Profile Icon Selection Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <i class="fas fa-images"></i>
+                    <h2>Profile Picture</h2>
+                </div>
+                <div class="icon-selection">
+                    <p class="selection-hint">Choose an avatar that represents you</p>
+                    <div class="icons-grid">
+                        <% icons.forEach((icon, index) => { %>
+                            <div class="icon-option-wrapper">
+                                <input 
+                                    type="radio" 
+                                    id="icon<%= index %>" 
+                                    name="icon" 
+                                    value="<%= icon %>" 
+                                    <%= user.profileIcon === icon ? 'checked' : '' %>
+                                />
+                                <label for="icon<%= index %>" class="icon-label">
+                                    <img src="/<%= icon %>" alt="Avatar option <%= index + 1 %>" class="icon-option" />
+                                </label>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
 
-        <div class="icon-selection">
-            <h3>Choose Your Icon</h3>
-            <div class="icons">
-                <% icons.forEach((icon, index) => { %>
-                    <input 
-                        type="radio" 
-                        id="icon<%= index %>" 
-                        name="icon" 
-                        value="<%= icon %>" 
-                        <%= user.profileIcon === icon ? 'checked' : '' %>
-                    />
-                    <label for="icon<%= index %>">
-                        <img src="/<%= icon %>" alt="Icon <%= index + 1 %>" class="icon-option" />
-                    </label>
-                <% }) %>
+            <!-- Account Actions Card -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <i class="fas fa-cog"></i>
+                    <h2>Account Actions</h2>
+                </div>
+                <div class="account-actions">
+                    <a href="/settings" class="profile-button secondary">
+                        <i class="fas fa-sliders-h"></i>
+                        Settings
+                    </a>
+                    <form action="/users/logout" method="POST" class="logout-form">
+                        <button type="submit" class="profile-button logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <button type="submit">Update Profile</button>
-    </form>
-
-    <form action="/users/logout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
+    </div>
 </div>
 
 <!-- Footer -->
-<footer>
-    <p>Fitness Tracker &copy; 2025</p>
+<footer class="main-footer">
+    <div class="footer-bottom">
+        <p>Fitness Tracker &copy; 2025. All rights reserved.</p>
+    </div>
 </footer>
 
 <!-- JavaScript -->
@@ -107,7 +161,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const profileImage = document.querySelector('.user-icon img');
+        const profileImage = document.querySelector('.profile-picture');
+        const headerProfileImage = document.querySelector('.user-icon img');
         const iconRadios = document.querySelectorAll('input[name="icon"]');
         const selectedIconInput = document.getElementById('selected_icon');
 
@@ -115,6 +170,7 @@
             radio.addEventListener('change', function() {
                 if (this.checked) {
                     profileImage.src = `/${this.value}`;
+                    headerProfileImage.src = `/${this.value}`;
                     selectedIconInput.value = this.value;
                 }
             });
@@ -122,9 +178,9 @@
     });
 
     function toggleMenu() {
-            const navList = document.querySelector('nav ul');
-            navList.classList.toggle('active');
-        }
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
 </script>
 
 </body>
