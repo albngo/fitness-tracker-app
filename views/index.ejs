@@ -7,6 +7,7 @@
     <!-- Link to the main.css file -->
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
@@ -57,16 +58,116 @@
         </ul>
     </nav>
 
-    <!-- Main content -->
-    <div class="main-content">
-        <h1>Welcome to the Fitness Tracker</h1>
-        <p>Your personal fitness companion to help you stay fit and healthy.</p>
-        <p>Generate workouts, track water intake, or sleep to achieve your fitness goals.</p>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Transform Your Fitness Journey</h1>
+            <p class="hero-subtitle">Your all-in-one companion for tracking workouts, hydration, and sleep patterns.</p>
+            <% if (!user) { %>
+                <div class="hero-cta">
+                    <a href="/users/register" class="cta-button primary">Get Started <i class="fas fa-arrow-right"></i></a>
+                    <a href="/users/login" class="cta-button secondary">Sign In <i class="fas fa-sign-in-alt"></i></a>
+                </div>
+            <% } else { %>
+                <div class="hero-cta">
+                    <a href="/dashboard" class="cta-button primary">Go to Dashboard <i class="fas fa-tachometer-alt"></i></a>
+                </div>
+            <% } %>
+        </div>
+        <div class="hero-image">
+            <img src="/hero-fitness.svg" alt="Fitness Illustration" class="hero-img">
+        </div>
     </div>
 
-    <!-- Footer (optional) -->
-    <footer>
-        <p>Fitness Tracker &copy; 2025</p>
+    <!-- Features Section -->
+    <div class="features-section">
+        <h2>Everything You Need to Stay Fit</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h3>Smart Workout Plans</h3>
+                <p>Get personalized workout routines tailored to your fitness level and goals.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <h3>Water Tracking</h3>
+                <p>Stay hydrated with our intelligent water intake tracker and reminders.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <h3>Sleep Analysis</h3>
+                <p>Monitor your sleep patterns and improve your rest quality.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Active Users</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Workout Types</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Tracking</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Start Your Fitness Journey?</h2>
+            <p>Join thousands of users who have already transformed their lives.</p>
+            <% if (!user) { %>
+                <a href="/users/register" class="cta-button primary">Start Free Today <i class="fas fa-rocket"></i></a>
+            <% } else { %>
+                <a href="/dashboard" class="cta-button primary">View Your Progress <i class="fas fa-chart-line"></i></a>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Fitness Tracker</h4>
+                <p>Your personal fitness companion to help you stay fit and healthy.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/workout">Workouts</a></li>
+                    <li><a href="/water">Water Tracking</a></li>
+                    <li><a href="/sleep">Sleep Tracking</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Fitness Tracker &copy; 2025. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- JavaScript for dropdown toggle -->

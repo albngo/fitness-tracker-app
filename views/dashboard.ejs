@@ -7,6 +7,7 @@
     <!-- Link to the main.css file -->
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
@@ -58,53 +59,92 @@
     </nav>
 
     <!-- Main content -->
-    <div class="main-content">
-        <h1>Welcome to your Dashboard, <%= user.username %>.</h1>
-        <p>Have a look at your stats at a glance!</p>
-    </div>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome back, <%= user.username %>! 👋</h1>
+            <p class="subtitle">Here's your fitness journey at a glance</p>
+        </div>
 
-    <div class="dashboard">
-        <h1>Dashboard</h1>
-
-        <ul class="dashboard-stats">
-            <!-- Sleep -->
-            <li class="dashboard-item">
-                <h3>Last Night's Sleep</h3>
-                <p><strong>Length:</strong> <%= sleepLength %> hours</p>
-                <p><strong>Quality:</strong> <%= sleepQuality %></p>
-            </li>
-
-            <!-- Water Progress -->
-            <li class="dashboard-item">
-                <h3>Today's Water Intake</h3>
-                <p><strong>Total Intake:</strong> <%= waterTotal %> / <%= waterGoal %> ml</p>
-                <p><strong>Percentage:</strong> <%= percentage %>%</p>
-
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
-                        <%= percentage %>%
+        <div class="dashboard-grid">
+            <!-- Sleep Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-moon"></i>
+                    <h3>Last Night's Sleep</h3>
+                </div>
+                <div class="card-content">
+                    <div class="metric">
+                        <span class="metric-value"><%= sleepLength %></span>
+                        <span class="metric-unit">hours</span>
+                    </div>
+                    <div class="metric-quality">
+                        <span class="quality-label">Quality:</span>
+                        <span class="quality-value"><%= sleepQuality %></span>
                     </div>
                 </div>
-            </li>
-        </ul>
+            </div>
+
+            <!-- Water Intake Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-tint"></i>
+                    <h3>Water Intake</h3>
+                </div>
+                <div class="card-content">
+                    <div class="metric">
+                        <span class="metric-value"><%= waterTotal %></span>
+                        <span class="metric-unit">/ <%= waterGoal %> ml</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: <%= percentage %>%; background-color: <%= progressColor %>;">
+                            <span class="progress-text"><%= percentage %>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Quick Actions</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quick-actions">
+                        <a href="/workout" class="action-button">
+                            <i class="fas fa-dumbbell"></i>
+                            Start Workout
+                        </a>
+                        <a href="/water" class="action-button">
+                            <i class="fas fa-plus"></i>
+                            Log Water
+                        </a>
+                        <a href="/sleep" class="action-button">
+                            <i class="fas fa-bed"></i>
+                            Log Sleep
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Footer (optional) -->
+    <!-- Footer -->
     <footer>
         <p>Fitness Tracker &copy; 2025</p>
     </footer>
 
-    <!-- JavaScript for dropdown toggle -->
-<script>
-    function toggleDropdown() {
-        var dropdown = document.querySelector('.dropdown');
-        dropdown.classList.toggle('active');
-    }
+    <!-- JavaScript -->
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
 
-    function toggleMenu() {
-        const navList = document.querySelector('nav ul');
-        navList.classList.toggle('active');
-    }
-</script>
+        function toggleMenu() {
+            const navList = document.querySelector('nav ul');
+            navList.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
