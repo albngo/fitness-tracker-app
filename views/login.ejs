@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Fitness Tracker - Login</title>
 </head>
 <body class="<%= theme %> <%= fontPref %>">
 
+<!-- Flash Messages -->
 <% if (messages.success) { %>
     <div class="flash success"><%= messages.success %></div>
 <% } %>
@@ -50,63 +52,139 @@
                 </a>
             </li>
         <% } else { %>
-            <li><a href="/users/login" class="nav-link">Login</a></li>
+            <li><a href="/users/login" class="nav-link active">Login</a></li>
             <li><a href="/users/register" class="nav-link">Sign Up</a></li>
         <% } %>
     </ul>
 </nav>
 
-    <h1>Login</h1>
+<div class="login-container">
+    <div class="login-card">
+        <div class="card-header">
+            <i class="fas fa-user-circle"></i>
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Log in to continue your fitness journey</p>
+        </div>
 
-    <form id="loginForm" action="/users/login" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <small class="error" style="color: red;"></small><br><br>
+        <form id="loginForm" action="/users/login" method="POST" class="login-form">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email Address
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                >
+                <small class="error"></small>
+            </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <small class="error" style="color: red;"></small><br><br>
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Password
+                </label>
+                <div class="password-input-group">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <small class="error"></small>
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>Remember me</span>
+                </label>
+                <a href="/users/forgot-password" class="forgot-password">Forgot Password?</a>
+            </div>
 
-    <% if (message) { %>
-        <p style="color: red;"><%= message %></p>
-    <% } %>
+            <button type="submit" class="login-button">
+                <i class="fas fa-sign-in-alt"></i>
+                Log In
+            </button>
 
-    <p>Don't have an account? <a href="/users/register">Register here</a></p>
+            <% if (message) { %>
+                <div class="form-message error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <%= message %>
+                </div>
+            <% } %>
+        </form>
 
-    <script>
-        function toggleDropdown() {
-            var dropdown = document.querySelector('.dropdown');
-            dropdown.classList.toggle('active');
+        <div class="card-footer">
+            <p>Don't have an account? <a href="/users/register">Sign up now</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
+
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.querySelector('.toggle-password i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(error => error.textContent = '');
+
+        // Email validation
+        if (!email.value.trim()) {
+            email.nextElementSibling.textContent = 'Email is required';
+            isValid = false;
+        } else if (!isValidEmail(email.value.trim())) {
+            email.nextElementSibling.textContent = 'Please enter a valid email address';
+            isValid = false;
         }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            const email = document.getElementById('email');
-            const password = document.getElementById('password');
-            let isValid = true;
-
-            document.querySelectorAll('.error').forEach(error => error.textContent = '');
-
-            if (!email.value.trim()) {
-                email.nextElementSibling.textContent = 'Email is required.';
-                isValid = false;
-            }
-
-            if (!password.value.trim()) {
-                password.nextElementSibling.textContent = 'Password is required.';
-                isValid = false;
-            }
-
-            if (!isValid) e.preventDefault();
-        });
-
-        function toggleMenu() {
-            const navList = document.querySelector('nav ul');
-            navList.classList.toggle('active');
+        // Password validation
+        if (!password.value.trim()) {
+            password.parentElement.nextElementSibling.textContent = 'Password is required';
+            isValid = false;
         }
-    </script>
+
+        if (!isValid) e.preventDefault();
+    });
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+</script>
 
 </body>
 </html>
