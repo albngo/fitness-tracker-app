@@ -10,7 +10,9 @@ import waterRoutes from './routes/water.js';
 import sleepRoutes from './routes/sleep.js';
 import profileRouter from './routes/profile.js';
 import dashRoutes from './routes/dash.js';
-import settingsRoutees from './routes/settings.js';
+import settingsRoutes from './routes/settings.js';
+import termsRoutes from './routes/terms.js';
+import privacyRoutes from './routes/privacy.js';
 
 // Define __filename and __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -71,7 +73,9 @@ app.use('/water', waterRoutes);
 app.use('/sleep', sleepRoutes);
 app.use('/profile', profileRouter);
 app.use('/dashboard', dashRoutes);
-app.use('/settings', settingsRoutees);
+app.use('/settings', settingsRoutes);
+app.use('/terms', termsRoutes);
+app.use('/privacy', privacyRoutes);
 
 // FAQ route
 app.get('/faq', (req, res) => {

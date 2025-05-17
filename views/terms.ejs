@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Fitness Tracker</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="<%= theme %> <%= fontPref %>">
+
+<!-- Navbar -->
+<nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <ul>
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/dashboard" class="nav-link">Dashboard</a></li>
+
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">Fitness</a>
+            <div class="dropdown-content">
+                <a href="/workout" class="dropdown-item">Generate Workout</a>
+                <a href="/water" class="dropdown-item">Water Tracker</a>
+                <a href="/sleep" class="dropdown-item">Sleep Tracker</a>
+            </div>
+        </li>
+
+        <li><a href="/faq" class="nav-link">FAQ and Feedback</a></li>
+        <li><a href="/settings" class="nav-link">Settings</a></li>
+
+        <!-- User Icon -->
+        <% if (user) { %>
+            <li class="user-icon">
+                <a href="/profile">
+                    <span><%= user.username %></span>
+                    <img src="/<%= user.profileIcon || 'avatarblack.png' %>" alt="User Icon" />
+                </a>
+            </li>
+        <% } else { %>
+            <li><a href="/users/login" class="nav-link">Login</a></li>
+            <li><a href="/users/register" class="nav-link">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>
+
+<div class="legal-container">
+    <div class="legal-header">
+        <h1><i class="fas fa-gavel"></i> Terms of Service</h1>
+        <p class="subtitle">Last updated: <%= new Date().toLocaleDateString() %></p>
+    </div>
+
+    <div class="legal-content">
+        <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing and using the Fitness Tracker application ("Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access the Service.</p>
+        </section>
+
+        <section>
+            <h2>2. User Accounts</h2>
+            <p>When you create an account with us, you guarantee that:</p>
+            <ul>
+                <li>The information you provide is accurate and complete</li>
+                <li>You are at least 13 years of age</li>
+                <li>You will maintain the accuracy of such information</li>
+                <li>Your use of the Service will not violate any applicable law or regulation</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. Service Usage</h2>
+            <p>Our Service allows you to track fitness activities, water intake, and sleep patterns. You are responsible for:</p>
+            <ul>
+                <li>Maintaining the confidentiality of your account</li>
+                <li>All activities that occur under your account</li>
+                <li>Notifying us of any unauthorized use of your account</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Content and Conduct</h2>
+            <p>You agree not to use the Service to:</p>
+            <ul>
+                <li>Upload or transmit viruses or malicious code</li>
+                <li>Harass, abuse, or harm others</li>
+                <li>Submit false or misleading information</li>
+                <li>Interfere with the proper working of the Service</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Data Usage and Privacy</h2>
+            <p>Your use of the Service is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices.</p>
+        </section>
+
+        <section>
+            <h2>6. Service Modifications</h2>
+            <p>We reserve the right to:</p>
+            <ul>
+                <li>Modify or discontinue any part of the Service without notice</li>
+                <li>Charge fees for the use of the Service</li>
+                <li>Modify these Terms of Service at any time</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>7. Limitation of Liability</h2>
+            <p>The Service is provided "as is" without warranties of any kind. We are not liable for any damages arising from your use of the Service.</p>
+        </section>
+
+        <section>
+            <h2>8. Contact Information</h2>
+            <p>If you have any questions about these Terms, please contact us through our FAQ and Feedback page.</p>
+        </section>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Fitness Tracker</h4>
+            <p>Your personal fitness companion to help you stay fit and healthy.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/workout">Workouts</a></li>
+                <li><a href="/water">Water Tracking</a></li>
+                <li><a href="/sleep">Sleep Tracking</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Connect With Us</h4>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>Fitness Tracker &copy; 2025. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html> 
