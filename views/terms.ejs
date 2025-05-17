@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Tracker - Terms of Service</title>
-    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Dyslexic&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -203,9 +203,8 @@
         <div class="footer-section">
             <h4>Connect With Us</h4>
             <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.instagram.com/akcustomwatches/" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@akcustomwatches" class="social-link"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
     </div>
@@ -215,8 +214,24 @@
 </footer>
 
 <script>
-        function toggleDropdown(dropdownId) {        // Close all other dropdowns        document.querySelectorAll('.dropdown-menu').forEach(menu => {            if (menu.id !== dropdownId + '-dropdown') {                menu.parentElement.classList.remove('active');            }        });                // Toggle the clicked dropdown        const dropdown = document.getElementById(dropdownId + '-dropdown').parentElement;        dropdown.classList.toggle('active');    }    function toggleMenu() {        const navList = document.querySelector('nav ul');        navList.classList.toggle('active');    }
+    function toggleDropdown(dropdownId) {
+        // Close all other dropdowns
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu.id !== dropdownId + '-dropdown') {
+                menu.parentElement.classList.remove('active');
+            }
+        });
+        
+        // Toggle the clicked dropdown
+        const dropdown = document.getElementById(dropdownId + '-dropdown').parentElement;
+        dropdown.classList.toggle('active');
+    }
+
+    function toggleMenu() {
+        const navList = document.querySelector('nav ul');
+        navList.classList.toggle('active');
+    }
 </script>
 
 </body>
-</html> 
+</html>
