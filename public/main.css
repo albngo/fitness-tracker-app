@@ -2,6 +2,20 @@
     box-sizing: border-box;
 }
 
+:root {
+    --card-border-radius: 12px;
+    --button-border-radius: 8px;
+    --standard-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --standard-transition: all 0.2s ease;
+    --bg-light: #ffffff;
+    --bg-dark: #1e1e1e;
+    --border-light: #eee;
+    --border-dark: #333;
+    --text-light: #333;
+    --text-dark: #f0f0f0;
+    --primary-color: #4a90e2;
+}
+
 /* HTML Styles */
 html {
     scroll-behavior: smooth;
@@ -3233,14 +3247,7 @@ body.dark .quality-indicator.excellent {
     margin-bottom: 2rem;
 }
 
-.workout-card {
-    background: var(--bg-light);
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--standard-shadow);
-    overflow: hidden;
-    transition: var(--standard-transition);
-    border: 1px solid var(--border-light);
-}
+.workout-card {    background: var(--bg-light);    border-radius: 12px;    box-shadow: var(--standard-shadow);    overflow: hidden;    transition: var(--standard-transition);    border: 1px solid var(--border-light);}
 
 .workout-card .card-header {
     background: rgba(74, 144, 226, 0.1);
@@ -3461,13 +3468,7 @@ body.dark .generate-workout-btn:hover {
     padding: 1rem;
 }
 
-.exercise-card {
-    background: var(--bg-light);
-    border: 1px solid var(--border-light);
-    border-radius: var(--button-border-radius);
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
+.exercise-card {    background: var(--bg-light);    border: 1px solid var(--border-light);    border-radius: 12px;    padding: 1rem;    margin-bottom: 1rem;}
 
 .exercise-header {
     display: flex;
