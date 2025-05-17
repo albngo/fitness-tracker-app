@@ -50,239 +50,14 @@ body.dark .dyslexic {
     letter-spacing: 0.07em;
 }
 
-/* Navbar Styles */
-nav {
-    position: sticky;
-    top: 0;
-    background-color: #f5f5f5;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
-    z-index: 100;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    align-items: center;
-    height: 60px;
+/* FAQ Page Styles */
+.faq-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-    flex-grow: 1;
-}
 
-nav ul li {
-    padding: 10px 20px;
-    text-align: center;
-}
-
-nav ul li a.nav-link {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px;
-    display: block;
-}
-
-nav ul li a.nav-link:hover {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-}
-
-body.light nav {
-    background-color: #f5f5f5 !important;
-}
-
-body.dark nav {
-    background-color: #1e1e1e !important;
-}
-
-body.dark nav ul li a.nav-link,
-body.dark .dropdown .dropbtn,
-body.dark .dropdown-content a.dropdown-item,
-body.dark .user-icon span {
-    color: #f0f0f0;
-}
-
-body.dark nav ul li a.nav-link:hover,
-body.dark .dropdown .dropbtn:hover,
-body.dark .dropdown-content a.dropdown-item:hover {
-    background-color: #333;
-}
-
-/* Fitness button to match other buttons */
-.dropdown .dropbtn {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px;
-    color: #333;
-    display: block;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.dropdown .dropbtn:hover {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 160px;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-}
-
-.dropdown.active .dropdown-content {
-    display: block;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown-content a.dropdown-item {
-    padding: 10px 20px;
-    color: #333;
-    text-decoration: none;
-    background-color: #f5f5f5;
-    display: block;
-    margin-bottom: 5px; /* <-- Add this line */
-    border-radius: 5px; /* Optional: rounded edges for all buttons */
-}
-
-.dropdown-content a.dropdown-item:hover {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-}
-
-/* Dark mode dropdown adjustments */
-body.dark .dropdown-content {
-    background-color: #444;
-}
-
-body.dark .dropdown-content a.dropdown-item {
-    color: #fff;
-    background-color: #444;
-    margin-bottom: 5px; /* Same spacing in dark mode */
-    border-radius: 5px;
-}
-
-body.dark .dropdown-content a.dropdown-item:hover {
-    background-color: #555;
-}
-
-.user-icon {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.user-icon img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-.user-icon span {
-    font-size: 14px;
-    color: #333;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .dropdown-content {
-        left: 0;
-        width: 100%;
-    }
-}
-
-/* Hamburger menu (mobile only) */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    padding: 10px;
-    z-index: 101;
-}
-
-.hamburger span {
-    height: 3px;
-    width: 25px;
-    background: #333;
-    margin: 4px 0;
-    border-radius: 2px;
-    transition: background-color 0.3s ease;
-}
-
-/* Dark mode hamburger */
-body.dark .hamburger span {
-    background: #f0f0f0;
-}
-
-@media (max-width: 768px) {
-    .hamburger {
-        display: flex;
-        position: absolute;
-        right: 20px;
-        top: 15px;
-    }
-
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        display: none;
-        background-color: #f5f5f5;
-        width: 100%;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    body.dark nav ul {
-        background-color: #1e1e1e;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    nav ul.active {
-        display: flex;
-    }
-
-    .dropdown-content {
-        position: relative;
-        transform: none;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-
-    .user-icon {
-        position: static;
-        margin-top: 10px;
-        justify-content: center;
-    }
-}
 
 /* FAQ Page Styles */
 .faq-container {
@@ -1328,7 +1103,6 @@ body.dark .cta-content p {
         justify-content: center;
     }
 }
-
 /* Settings Page Styles */
 .settings-container {
     max-width: 1200px;
@@ -3812,3 +3586,4 @@ body.dark .legal-content h2 {
         font-size: 1.25rem;
     }
 }
+
