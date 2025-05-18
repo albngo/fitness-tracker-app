@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
                 SELECT * FROM workout_logs 
                 WHERE user_id = ? 
                 ORDER BY date DESC 
-                LIMIT 5
+                LIMIT 2
             `;
             db.query(query, [userId], (err, results) => {
                 if (err) return reject(err);

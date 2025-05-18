@@ -26,15 +26,15 @@ router.use((req, res, next) => {
 });
 
 // Get workout history for the user
-const getWorkoutHistory = (userId) => {
+const getWorkoutHistory = (userId, limit = 5) => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT * FROM workout_logs 
       WHERE user_id = ? 
       ORDER BY date DESC 
-      LIMIT 10
+      ${limit ? 'LIMIT ?' : ''}
     `;
-    db.query(query, [userId], (err, results) => {
+    db.query(query, limit ? [userId, limit] : [userId], (err, results) => {
       if (err) return reject(err);
       resolve(results);
     });
@@ -49,7 +49,8 @@ router.get('/', async (req, res) => {
       workout: null, 
       error: null,
       workoutHistory,
-      user: req.user 
+      user: req.user,
+      showingAllHistory: false
     });
   } catch (err) {
     console.error('Error fetching workout history:', err);
@@ -57,8 +58,43 @@ router.get('/', async (req, res) => {
       workout: null, 
       error: 'Error fetching workout history',
       workoutHistory: [],
-      user: req.user
+      user: req.user,
+      showingAllHistory: false
     });
+  }
+});
+
+// Route to view all workouts
+router.get('/history', async (req, res) => {
+  try {
+    const workoutHistory = await getWorkoutHistory(req.user.id, null);
+    res.render('workout', { 
+      workout: null, 
+      error: null,
+      workoutHistory,
+      user: req.user,
+      showingAllHistory: true
+    });
+  } catch (err) {
+    console.error('Error fetching workout history:', err);
+    res.render('workout', { 
+      workout: null, 
+      error: 'Error fetching workout history',
+      workoutHistory: [],
+      user: req.user,
+      showingAllHistory: true
+    });
+  }
+});
+
+// Route to get all workouts as JSON
+router.get('/history/data', async (req, res) => {
+  try {
+    const workoutHistory = await getWorkoutHistory(req.user.id, null);
+    res.json(workoutHistory);
+  } catch (err) {
+    console.error('Error fetching workout history:', err);
+    res.status(500).json({ error: 'Error fetching workout history' });
   }
 });
 
@@ -147,7 +183,8 @@ router.post('/generate', async (req, res) => {
         workout: workouts, 
         error: null,
         workoutHistory,
-        user: req.user
+        user: req.user,
+        showingAllHistory: false
       });
     });
 
@@ -158,7 +195,8 @@ router.post('/generate', async (req, res) => {
       workout: null, 
       error: 'Failed to fetch workouts. Please try again later.',
       workoutHistory,
-      user: req.user
+      user: req.user,
+      showingAllHistory: false
     });
   }
 });
