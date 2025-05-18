@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from 'axios';
+import db from '../config/db.js';
 
 const router = express.Router();
 
@@ -24,45 +25,82 @@ router.use((req, res, next) => {
   next();
 });
 
+// Get workout history for the user
+const getWorkoutHistory = (userId) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT * FROM workout_logs 
+      WHERE user_id = ? 
+      ORDER BY date DESC 
+      LIMIT 10
+    `;
+    db.query(query, [userId], (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
 // Render the workout form
-router.get('/', (req, res) => {
-  res.render('workout', { workout: null, error: null });
+router.get('/', async (req, res) => {
+  try {
+    const workoutHistory = await getWorkoutHistory(req.user.id);
+    res.render('workout', { 
+      workout: null, 
+      error: null,
+      workoutHistory,
+      user: req.user 
+    });
+  } catch (err) {
+    console.error('Error fetching workout history:', err);
+    res.render('workout', { 
+      workout: null, 
+      error: 'Error fetching workout history',
+      workoutHistory: [],
+      user: req.user
+    });
+  }
 });
 
 // Fetch workouts based on selected muscle groups
 router.post('/generate', async (req, res) => {
-  const muscles = Array.isArray(req.body.type) ? req.body.type : [req.body.type]; // Ensure it's always an array
-  const difficulty = req.body.difficulty || 'beginner'; // Default to 'beginner' if no input is provided
-  const exerciseType = req.body.exerciseType || 'strength'; // Default to 'strength' if no input is provided
-  const showInstructions = req.body.showInstructions === 'true' || req.body.showInstructions === 'on'; // Check if instructions should be shown
+  const muscles = Array.isArray(req.body.type) ? req.body.type : [req.body.type];
+  const difficulty = req.body.difficulty || 'beginner';
+  const exerciseType = req.body.exerciseType || 'strength';
+  const showInstructions = req.body.showInstructions === 'true' || req.body.showInstructions === 'on';
+  const userId = req.user.id;
 
-  console.log("Selected muscles:", muscles);  // Debug log: Check the selected muscles
+  console.log("Selected muscles:", muscles);
 
   // Validate that all selected muscles are valid
   const invalidMuscles = muscles.filter(muscle => !validMuscles.includes(muscle));
   if (invalidMuscles.length > 0) {
-    return res.render('workout', { workout: null, error: `Invalid muscle groups selected: ${invalidMuscles.join(', ')}` });
+    const workoutHistory = await getWorkoutHistory(userId);
+    return res.render('workout', { 
+      workout: null, 
+      error: `Invalid muscle groups selected: ${invalidMuscles.join(', ')}`,
+      workoutHistory,
+      user: req.user
+    });
   }
 
   try {
     // Fetch exercises for all selected muscle groups
     const fetchExercises = muscles.map(async (muscle) => {
-      console.log(`Fetching exercises for muscle: ${muscle}`);  // Debug log: Check the muscle being processed
+      console.log(`Fetching exercises for muscle: ${muscle}`);
 
       const response = await axios.get(
         `https://api.api-ninjas.com/v1/exercises?muscle=${muscle}&difficulty=${difficulty}&type=${exerciseType}`,
         {
-          headers: { 'X-Api-Key': API_KEY },  // Use hardcoded API key
+          headers: { 'X-Api-Key': API_KEY },
         }
       );
 
-      // If the response has exercises
       if (response.data && response.data.length > 0) {
-        console.log(`Exercises for ${muscle}:`, response.data);  // Debug log: Check the fetched exercises
+        console.log(`Exercises for ${muscle}:`, response.data);
 
-        // Shuffle and select 2-3 exercises per muscle group
         const shuffledExercises = response.data.sort(() => 0.5 - Math.random());
-        const selectedExercises = shuffledExercises.slice(0, 3); // Select first 3 exercises
+        const selectedExercises = shuffledExercises.slice(0, 3);
 
         return {
           muscle,
@@ -72,25 +110,56 @@ router.post('/generate', async (req, res) => {
             difficulty: exercise.difficulty,
             muscle: exercise.muscle,
             instructions: showInstructions && exercise.instructions ? exercise.instructions : null,
-            sets: '3', // Default sets
-            reps: '10', // Default reps
-            rest: '90 seconds', // Default rest time
+            sets: '3',
+            reps: '10',
+            rest: '90 seconds',
           })),
         };
       } else {
-        return { muscle, exercises: [] }; // Return empty exercises if none are found
+        return { muscle, exercises: [] };
       }
     });
 
-    // Wait for all API requests to resolve
     const workouts = await Promise.all(fetchExercises);
-    console.log("All workouts fetched:", workouts);  // Debug log: Check all fetched workouts
+    console.log("All workouts fetched:", workouts);
 
-    // Render the data
-    res.render('workout', { workout: workouts, error: null });
+    // Save the workout to the database
+    const workoutName = `${exerciseType} workout - ${muscles.join(', ')}`;
+    const saveWorkout = {
+      user_id: userId,
+      workout_name: workoutName,
+      muscle_groups: muscles.join(','),
+      difficulty: difficulty,
+      exercise_type: exerciseType,
+      exercises: JSON.stringify(workouts)
+    };
+
+    db.query('INSERT INTO workout_logs SET ?', saveWorkout, async (err) => {
+      if (err) {
+        console.error('Error saving workout:', err);
+        req.flash('error', 'Error saving workout');
+      } else {
+        req.flash('success', 'Workout generated and saved successfully!');
+      }
+
+      const workoutHistory = await getWorkoutHistory(userId);
+      res.render('workout', { 
+        workout: workouts, 
+        error: null,
+        workoutHistory,
+        user: req.user
+      });
+    });
+
   } catch (error) {
     console.error('Error fetching workout:', error);
-    res.render('workout', { workout: null, error: 'Failed to fetch workouts. Please try again later.' });
+    const workoutHistory = await getWorkoutHistory(userId);
+    res.render('workout', { 
+      workout: null, 
+      error: 'Failed to fetch workouts. Please try again later.',
+      workoutHistory,
+      user: req.user
+    });
   }
 });
 

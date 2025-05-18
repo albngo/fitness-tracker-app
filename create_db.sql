@@ -47,10 +47,15 @@ CREATE TABLE sleep_logs (
 CREATE TABLE workout_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    date DATE NOT NULL,
-    muscle_group VARCHAR(50) NOT NULL,
-    exercise_name VARCHAR(100) NOT NULL,
-    sets INT NOT NULL,
-    reps INT NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    muscle_group VARCHAR(50),
+    exercise_name VARCHAR(100),
+    sets INT,
+    reps INT,
+    workout_name VARCHAR(255),
+    muscle_groups TEXT,
+    difficulty VARCHAR(50),
+    exercise_type VARCHAR(50),
+    exercises JSON,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

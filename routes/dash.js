@@ -44,28 +44,42 @@ router.get('/', async (req, res) => {
         });
     };
 
+    const getRecentWorkouts = () => {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT * FROM workout_logs 
+                WHERE user_id = ? 
+                ORDER BY date DESC 
+                LIMIT 5
+            `;
+            db.query(query, [userId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results || []);
+            });
+        });
+    };
+
     try {
-        const [sleepLog, waterTotal] = await Promise.all([getLastSleep(), getTodayWater()]);
+        const [lastSleep, todayWater, recentWorkouts] = await Promise.all([
+            getLastSleep(),
+            getTodayWater(),
+            getRecentWorkouts()
+        ]);
 
-        const waterGoal = 2000; // Example: Set water goal to 2000 ml
-        const percentage = Math.min(100, Math.round((waterTotal / waterGoal) * 100));
-
-        // Colour transition: red to green
-        const hue = Math.round((percentage / 100) * 120); // Smooth transition from red to green
-        const progressColor = `hsl(${hue}, 80%, 50%)`;
+        const waterGoal = 2000; // Daily water goal in ml
+        const waterPercentage = Math.min(100, Math.round((todayWater / waterGoal) * 100)) || 0;
 
         res.render('dashboard', {
             user: req.user,
-            sleepLength: sleepLog ? (sleepLog.sleep_duration_minutes / 60).toFixed(1) : 0, // Convert minutes to hours
-            sleepQuality: sleepLog ? sleepLog.sleep_quality : 'No data',
+            lastSleep,
+            todayWater,
             waterGoal,
-            waterTotal,
-            percentage,
-            progressColor
+            waterPercentage,
+            recentWorkouts
         });
     } catch (err) {
         console.error('Error fetching dashboard data:', err);
-        res.status(500).send('Error loading dashboard');
+        res.status(500).send('Error loading dashboard data');
     }
 });
 
