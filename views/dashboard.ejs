@@ -135,6 +135,10 @@
                         <span class="quality-label">Quality:</span>
                         <span class="quality-value"><%= lastSleep ? lastSleep.sleep_quality : 'No data' %></span>
                     </div>
+                    <div class="recommendation">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><%= sleepRecommendation %></p>
+                    </div>
                 </div>
             </div>
 
@@ -153,6 +157,10 @@
                         <div class="progress-bar" style="width: <%= waterPercentage %>%; background-color: hsl(<%= Math.round((waterPercentage / 100) * 120) %>, 80%, 50%);">
                             <span class="progress-text"><%= waterPercentage %>%</span>
                         </div>
+                    </div>
+                    <div class="recommendation">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><%= waterRecommendation %></p>
                     </div>
                 </div>
             </div>
