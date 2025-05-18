@@ -286,36 +286,15 @@
         });
     });
 
-    // Water logs data
-    const waterLogs = <%- JSON.stringify(waterLogs) %>;
-    const today = new Date().toISOString().split('T')[0];
-    const dailyGoal = <%= waterGoal %>; // Use the server-provided goal
-
-    // Prepare data for chart
-    const last7Days = [...Array(7)].map((_, i) => {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        return d.toISOString().split('T')[0];
-    }).reverse();
-
-    const amounts = last7Days.map(date => {
-        return waterLogs
-            .filter(log => new Date(log.date).toISOString().split('T')[0] === date)
-            .reduce((sum, log) => sum + log.amount_ml, 0);
-    });
-
-    // Create Chart
+    // Initialize Chart
     const ctx = document.getElementById('waterChart').getContext('2d');
-    new Chart(ctx, {
+    const waterChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: last7Days.map(date => {
-                const d = new Date(date);
-                return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-            }),
+            labels: <%- JSON.stringify(chartData.labels) %>,
             datasets: [{
                 label: 'Water Intake (ml)',
-                data: amounts,
+                data: <%- JSON.stringify(chartData.data) %>,
                 backgroundColor: 'rgba(74, 144, 226, 0.2)',
                 borderColor: 'rgba(74, 144, 226, 1)',
                 borderWidth: 2,

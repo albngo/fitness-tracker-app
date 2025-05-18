@@ -331,32 +331,15 @@
         document.getElementById('avgQuality').textContent = qualityText;
     }
 
-    // Prepare data for chart
-    const last7Days = [...Array(7)].map((_, i) => {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        return d.toISOString().split('T')[0];
-    }).reverse();
-
-    const sleepData = last7Days.map(date => {
-        const dayLogs = sleepLogs.filter(log => 
-            new Date(log.date).toISOString().split('T')[0] === date
-        );
-        return dayLogs.reduce((sum, log) => sum + log.sleep_duration_minutes, 0) / 60; // Convert to hours
-    });
-
-    // Create Chart
+    // Initialize Chart
     const ctx = document.getElementById('sleepChart').getContext('2d');
     const sleepChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: last7Days.map(date => {
-                const d = new Date(date);
-                return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-            }),
+            labels: <%- JSON.stringify(chartData.labels) %>,
             datasets: [{
                 label: 'Sleep Duration (hours)',
-                data: sleepData,
+                data: <%- JSON.stringify(chartData.data) %>,
                 backgroundColor: 'rgba(147, 112, 219, 0.2)',
                 borderColor: 'rgba(147, 112, 219, 1)',
                 borderWidth: 2,

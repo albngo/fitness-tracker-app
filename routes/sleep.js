@@ -13,6 +13,54 @@ router.use((req, res, next) => {
     next();
 });
 
+// Sleep data processing functions
+function calculateSleepStats(sleepLogs) {
+    if (!sleepLogs || sleepLogs.length === 0) {
+        return {
+            avgDuration: 0,
+            avgQuality: 'No Data'
+        };
+    }
+
+    const avgDuration = sleepLogs.reduce((sum, log) => sum + log.sleep_duration_minutes, 0) / sleepLogs.length;
+    const hours = Math.floor(avgDuration / 60);
+    const minutes = Math.round(avgDuration % 60);
+
+    const qualityMap = { poor: 1, fair: 2, good: 3, excellent: 4 };
+    const avgQualityScore = sleepLogs.reduce((sum, log) => sum + qualityMap[log.sleep_quality], 0) / sleepLogs.length;
+    
+    let qualityText = 'Poor';
+    if (avgQualityScore >= 3.5) qualityText = 'Excellent';
+    else if (avgQualityScore >= 2.5) qualityText = 'Good';
+    else if (avgQualityScore >= 1.5) qualityText = 'Fair';
+
+    return {
+        avgDuration: `${hours}h ${minutes}m`,
+        avgQuality: qualityText
+    };
+}
+
+function getLast7DaysData(sleepLogs) {
+    const last7Days = [...Array(7)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return d.toISOString().split('T')[0];
+    }).reverse();
+
+    return {
+        labels: last7Days.map(date => {
+            const d = new Date(date);
+            return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        }),
+        data: last7Days.map(date => {
+            const dayLogs = sleepLogs.filter(log => 
+                new Date(log.date).toISOString().split('T')[0] === date
+            );
+            return dayLogs.reduce((sum, log) => sum + log.sleep_duration_minutes, 0) / 60;
+        })
+    };
+}
+
 // Route to render the sleep tracking page
 router.get('/', (req, res) => {
     const userId = req.user.id;
@@ -24,10 +72,17 @@ router.get('/', (req, res) => {
             return res.status(500).send('Error fetching sleep logs');
         }
 
+        const stats = calculateSleepStats(results);
+        const chartData = getLast7DaysData(results);
+
         console.log('Fetched sleep logs:', results);
 
         // Pass the sleep logs to the template
-        res.render('sleep', { sleepLogs: results });
+        res.render('sleep', { 
+            sleepLogs: results,
+            stats,
+            chartData
+        });
     });
 });
 

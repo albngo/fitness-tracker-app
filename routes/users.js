@@ -211,4 +211,63 @@ router.post('/logout', (req, res) => {
     });
 });
 
+// Password strength checking function
+function checkPasswordStrength(password) {
+    let strength = 0;
+    
+    // Length check
+    if (password.length >= 8) strength += 25;
+    
+    // Contains number
+    if (/\d/.test(password)) strength += 25;
+    
+    // Contains letter
+    if (/[a-zA-Z]/.test(password)) strength += 25;
+    
+    // Contains special character
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 25;
+
+    return {
+        score: strength,
+        text: strength <= 25 ? 'Weak' : 
+              strength <= 50 ? 'Fair' : 
+              strength <= 75 ? 'Good' : 'Strong',
+        color: strength <= 25 ? '#dc3545' : 
+               strength <= 50 ? '#ffc107' :
+               strength <= 75 ? '#28a745' : '#20c997'
+    };
+}
+
+// Form validation function
+function validateRegistrationForm(username, email, password) {
+    const errors = {};
+    
+    // Username validation
+    if (!username.trim()) {
+        errors.username = 'Username is required';
+    } else if (username.length < 3 || username.length > 20) {
+        errors.username = 'Username must be between 3 and 20 characters';
+    }
+
+    // Email validation
+    if (!email.trim()) {
+        errors.email = 'Email is required';
+    } else if (!isValidEmail(email.trim())) {
+        errors.email = 'Please enter a valid email address';
+    }
+
+    // Password validation
+    if (!password.trim()) {
+        errors.password = 'Password is required';
+    } else if (password.length < 8) {
+        errors.password = 'Password must be at least 8 characters long';
+    }
+
+    return errors;
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 export default router;

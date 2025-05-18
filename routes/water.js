@@ -54,9 +54,31 @@ router.get('/', (req, res) => {
         });
     };
 
+    // Water data processing functions
+    function getLast7DaysData(waterLogs) {
+        const last7Days = [...Array(7)].map((_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            return d.toISOString().split('T')[0];
+        }).reverse();
+
+        return {
+            labels: last7Days.map(date => {
+                const d = new Date(date);
+                return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+            }),
+            data: last7Days.map(date => {
+                return waterLogs
+                    .filter(log => new Date(log.date).toISOString().split('T')[0] === date)
+                    .reduce((sum, log) => sum + log.amount_ml, 0);
+            })
+        };
+    }
+
     Promise.all([getTodayWater(), getWaterLogs(), getUserData()])
         .then(([waterTotal, waterLogs, waterGoal]) => {
             const percentage = Math.min(100, Math.round((waterTotal / waterGoal) * 100)) || 0;
+            const chartData = getLast7DaysData(waterLogs);
 
             const hue = Math.round((percentage / 100) * 120); // 0 = red, 120 = green
             const progressColor = `hsl(${hue}, 80%, 50%)`;
@@ -67,7 +89,8 @@ router.get('/', (req, res) => {
                 waterTotal,
                 waterGoal,
                 percentage,
-                progressColor
+                progressColor,
+                chartData
             });
         })
         .catch(err => {

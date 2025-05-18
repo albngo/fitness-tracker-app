@@ -41,14 +41,43 @@ const getWorkoutHistory = (userId, limit = 5) => {
   });
 };
 
+// Workout data processing functions
+function processWorkoutDetails(workout) {
+    try {
+        const exercises = typeof workout.exercises === 'string' ? 
+            JSON.parse(workout.exercises) : workout.exercises;
+
+        return {
+            ...workout,
+            exercises: exercises.map(group => ({
+                muscle: group.muscle,
+                exercises: group.exercises.map(exercise => ({
+                    ...exercise,
+                    details: [
+                        { icon: 'signal', label: 'Difficulty', value: exercise.difficulty },
+                        { icon: 'bullseye', label: 'Target', value: exercise.muscle },
+                        { icon: 'redo', label: 'Sets', value: exercise.sets },
+                        { icon: 'repeat', label: 'Reps', value: exercise.reps },
+                        { icon: 'clock', label: 'Rest', value: exercise.rest }
+                    ]
+                }))
+            }))
+        };
+    } catch (error) {
+        console.error('Error processing workout details:', error);
+        return workout;
+    }
+}
+
 // Render the workout form
 router.get('/', async (req, res) => {
   try {
     const workoutHistory = await getWorkoutHistory(req.user.id);
+    const processedWorkouts = workoutHistory.map(processWorkoutDetails);
     res.render('workout', { 
       workout: null, 
       error: null,
-      workoutHistory,
+      workoutHistory: processedWorkouts,
       user: req.user,
       showingAllHistory: false
     });
@@ -91,7 +120,8 @@ router.get('/history', async (req, res) => {
 router.get('/history/data', async (req, res) => {
   try {
     const workoutHistory = await getWorkoutHistory(req.user.id, null);
-    res.json(workoutHistory);
+    const processedWorkouts = workoutHistory.map(processWorkoutDetails);
+    res.json(processedWorkouts);
   } catch (err) {
     console.error('Error fetching workout history:', err);
     res.status(500).json({ error: 'Error fetching workout history' });
@@ -145,7 +175,7 @@ router.post('/generate', async (req, res) => {
             type: exercise.type,
             difficulty: exercise.difficulty,
             muscle: exercise.muscle,
-            instructions: showInstructions && exercise.instructions ? exercise.instructions : null,
+            instructions: showInstructions ? exercise.instructions : '',
             sets: '3',
             reps: '10',
             rest: '90 seconds',
@@ -179,10 +209,11 @@ router.post('/generate', async (req, res) => {
       }
 
       const workoutHistory = await getWorkoutHistory(userId);
+      const processedWorkouts = workoutHistory.map(processWorkoutDetails);
       res.render('workout', { 
         workout: workouts, 
         error: null,
-        workoutHistory,
+        workoutHistory: processedWorkouts,
         user: req.user,
         showingAllHistory: false
       });
@@ -191,10 +222,11 @@ router.post('/generate', async (req, res) => {
   } catch (error) {
     console.error('Error fetching workout:', error);
     const workoutHistory = await getWorkoutHistory(userId);
+    const processedWorkouts = workoutHistory.map(processWorkoutDetails);
     res.render('workout', { 
       workout: null, 
       error: 'Failed to fetch workouts. Please try again later.',
-      workoutHistory,
+      workoutHistory: processedWorkouts,
       user: req.user,
       showingAllHistory: false
     });

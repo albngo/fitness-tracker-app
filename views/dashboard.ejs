@@ -154,7 +154,7 @@
                         <span class="metric-unit">/ <%= waterGoal %> ml</span>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar" style="width: <%= waterPercentage %>%; background-color: hsl(<%= Math.round((waterPercentage / 100) * 120) %>, 80%, 50%);">
+                        <div class="progress-bar" style="width: <%= waterPercentage %>%; background-color: hsl(<%= Math.round((waterPercentage / 100) * 120) %>, 80%, 50%)">
                             <span class="progress-text"><%= waterPercentage %>%</span>
                         </div>
                     </div>
@@ -225,124 +225,37 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Workout Details Modal -->
-            <div id="workoutModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalWorkoutName"></h2>
-                        <span class="close-modal">&times;</span>
+    <!-- Workout Details Modal -->
+    <div id="workoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalWorkoutName"></h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="workout-info">
+                    <div class="info-item">
+                        <i class="fas fa-calendar"></i>
+                        <span id="modalWorkoutDate"></span>
                     </div>
-                    <div class="modal-body">
-                        <div class="workout-info">
-                            <div class="info-item">
-                                <i class="fas fa-calendar"></i>
-                                <span id="modalWorkoutDate"></span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-layer-group"></i>
-                                <span id="modalMuscleGroups"></span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-signal"></i>
-                                <span id="modalDifficulty"></span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-running"></i>
-                                <span id="modalExerciseType"></span>
-                            </div>
-                        </div>
-                        <div id="modalExercises" class="exercises-list"></div>
+                    <div class="info-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span id="modalMuscleGroups"></span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-signal"></i>
+                        <span id="modalDifficulty"></span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-running"></i>
+                        <span id="modalExerciseType"></span>
                     </div>
                 </div>
+                <div id="modalExercises" class="exercises-list"></div>
             </div>
-
-            <script type="text/javascript">
-                function showWorkoutDetails(workoutData) {
-                    try {
-                        const workout = typeof workoutData === 'string' ? JSON.parse(workoutData) : workoutData;
-                        console.log('Showing workout details:', workout); // Debug log
-
-                        const modal = document.getElementById('workoutModal');
-                        const modalWorkoutName = document.getElementById('modalWorkoutName');
-                        const modalWorkoutDate = document.getElementById('modalWorkoutDate');
-                        const modalMuscleGroups = document.getElementById('modalMuscleGroups');
-                        const modalDifficulty = document.getElementById('modalDifficulty');
-                        const modalExerciseType = document.getElementById('modalExerciseType');
-                        const modalExercises = document.getElementById('modalExercises');
-
-                        // Set workout details
-                        modalWorkoutName.textContent = workout.workout_name;
-                        modalWorkoutDate.textContent = new Date(workout.date).toLocaleDateString();
-                        modalMuscleGroups.textContent = workout.muscle_groups;
-                        modalDifficulty.textContent = workout.difficulty;
-                        modalExerciseType.textContent = workout.exercise_type;
-
-                        // Parse and display exercises
-                        const exercises = typeof workout.exercises === 'string' ? 
-                            JSON.parse(workout.exercises) : workout.exercises;
-
-                        modalExercises.innerHTML = exercises.map(group => `
-                            <div class="exercise-group">
-                                <h3>Exercises for ${group.muscle}</h3>
-                                ${group.exercises.map(exercise => `
-                                    <div class="exercise-card">
-                                        <div class="exercise-header">
-                                            <h4>${exercise.name}</h4>
-                                            <span class="exercise-type">${exercise.type}</span>
-                                        </div>
-                                        <div class="exercise-details">
-                                            <div class="detail-item">
-                                                <i class="fas fa-signal"></i>
-                                                <span>Difficulty: ${exercise.difficulty}</span>
-                                            </div>
-                                            <div class="detail-item">
-                                                <i class="fas fa-bullseye"></i>
-                                                <span>Target: ${exercise.muscle}</span>
-                                            </div>
-                                            <div class="detail-item">
-                                                <i class="fas fa-redo"></i>
-                                                <span>Sets: ${exercise.sets}</span>
-                                            </div>
-                                            <div class="detail-item">
-                                                <i class="fas fa-repeat"></i>
-                                                <span>Reps: ${exercise.reps}</span>
-                                            </div>
-                                            <div class="detail-item">
-                                                <i class="fas fa-clock"></i>
-                                                <span>Rest: ${exercise.rest}</span>
-                                            </div>
-                                        </div>
-                                        ${exercise.instructions ? `
-                                            <div class="exercise-instructions">
-                                                <i class="fas fa-info-circle"></i>
-                                                <p>${exercise.instructions}</p>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `).join('');
-
-                        // Show modal
-                        modal.style.display = 'block';
-                    } catch (error) {
-                        console.error('Error showing workout details:', error);
-                    }
-                }
-
-                // Close modal when clicking the X or outside the modal
-                document.querySelector('.close-modal').onclick = function() {
-                    document.getElementById('workoutModal').style.display = 'none';
-                }
-
-                window.onclick = function(event) {
-                    const modal = document.getElementById('workoutModal');
-                    if (event.target == modal) {
-                        modal.style.display = 'none';
-                    }
-                }
-            </script>
         </div>
     </div>
 
@@ -375,7 +288,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
         function toggleDropdown(dropdownId) {
             // Close all other dropdowns
@@ -393,6 +305,106 @@
         function toggleMenu() {
             const navList = document.querySelector('nav ul');
             navList.classList.toggle('active');
+        }
+
+        function showWorkoutDetails(workoutData) {
+            try {
+                console.log('Workout data:', workoutData); // Debug log
+                const workout = typeof workoutData === 'string' ? JSON.parse(workoutData) : workoutData;
+                console.log('Parsed workout:', workout); // Debug log
+                
+                const modal = document.getElementById('workoutModal');
+                const modalWorkoutName = document.getElementById('modalWorkoutName');
+                const modalWorkoutDate = document.getElementById('modalWorkoutDate');
+                const modalMuscleGroups = document.getElementById('modalMuscleGroups');
+                const modalDifficulty = document.getElementById('modalDifficulty');
+                const modalExerciseType = document.getElementById('modalExerciseType');
+                const modalExercises = document.getElementById('modalExercises');
+
+                // Set workout details
+                modalWorkoutName.textContent = workout.workout_name;
+                modalWorkoutDate.textContent = new Date(workout.date).toLocaleDateString();
+                modalMuscleGroups.textContent = workout.muscle_groups;
+                modalDifficulty.textContent = workout.difficulty;
+                modalExerciseType.textContent = workout.exercise_type;
+
+                // Parse exercises if needed and ensure it's an array
+                let exercises;
+                try {
+                    exercises = typeof workout.exercises === 'string' ? 
+                        JSON.parse(workout.exercises) : workout.exercises;
+                    console.log('Parsed exercises:', exercises); // Debug log
+                } catch (e) {
+                    console.error('Error parsing exercises:', e);
+                    exercises = [];
+                }
+
+                // Ensure exercises is an array
+                if (!Array.isArray(exercises)) {
+                    console.error('Exercises is not an array:', exercises);
+                    exercises = [];
+                }
+
+                // Display exercises
+                modalExercises.innerHTML = exercises.map(group => `
+                    <div class="exercise-group">
+                        <h3>Exercises for ${group.muscle}</h3>
+                        ${group.exercises.map(exercise => `
+                            <div class="exercise-card">
+                                <div class="exercise-header">
+                                    <h4>${exercise.name}</h4>
+                                    <span class="exercise-type">${exercise.type}</span>
+                                </div>
+                                <div class="exercise-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-signal"></i>
+                                        <span>Difficulty: ${exercise.difficulty}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-bullseye"></i>
+                                        <span>Target: ${exercise.muscle}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-redo"></i>
+                                        <span>Sets: ${exercise.sets}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-repeat"></i>
+                                        <span>Reps: ${exercise.reps}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Rest: ${exercise.rest}</span>
+                                    </div>
+                                </div>
+                                ${exercise.instructions ? `
+                                    <div class="exercise-instructions">
+                                        <i class="fas fa-info-circle"></i>
+                                        <p>${exercise.instructions}</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('');
+
+                // Show modal
+                modal.style.display = 'block';
+            } catch (error) {
+                console.error('Error showing workout details:', error);
+            }
+        }
+
+        // Close modal when clicking the X or outside the modal
+        document.querySelector('.close-modal').onclick = function() {
+            document.getElementById('workoutModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('workoutModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
         }
     </script>
 </body>

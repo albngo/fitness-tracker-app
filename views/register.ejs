@@ -241,97 +241,58 @@
         }
     }
 
-    function checkPasswordStrength(password) {
-        let strength = 0;
+    // Update password strength UI
+    document.getElementById('password').addEventListener('input', function(e) {
+        const password = e.target.value;
         const strengthBar = document.querySelector('.strength-fill');
         const strengthText = document.querySelector('.strength-text span');
 
-        // Length check
-        if (password.length >= 8) strength += 25;
-        
-        // Contains number
-        if (/\d/.test(password)) strength += 25;
-        
-        // Contains letter
-        if (/[a-zA-Z]/.test(password)) strength += 25;
-        
-        // Contains special character
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 25;
-
-        // Update UI
-        strengthBar.style.width = strength + '%';
-        
-        // Update color and text based on strength
-        if (strength <= 25) {
-            strengthBar.style.backgroundColor = '#dc3545';
-            strengthText.textContent = 'Weak';
-        } else if (strength <= 50) {
-            strengthBar.style.backgroundColor = '#ffc107';
-            strengthText.textContent = 'Fair';
-        } else if (strength <= 75) {
-            strengthBar.style.backgroundColor = '#28a745';
-            strengthText.textContent = 'Good';
-        } else {
-            strengthBar.style.backgroundColor = '#20c997';
-            strengthText.textContent = 'Strong';
-        }
-    }
-
-    document.getElementById('password').addEventListener('input', function(e) {
-        checkPasswordStrength(e.target.value);
+        // Make API call to check password strength
+        fetch('/users/check-password-strength', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update UI based on server response
+            strengthBar.style.width = data.score + '%';
+            strengthBar.style.backgroundColor = data.color;
+            strengthText.textContent = data.text;
+        })
+        .catch(error => console.error('Error:', error));
     });
 
+    // Form submission handling
     document.getElementById('registerForm').addEventListener('submit', function(e) {
-        const username = document.getElementById('username');
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        const terms = document.getElementById('terms');
-        let isValid = true;
-
-        // Clear previous errors
-        document.querySelectorAll('.error').forEach(error => error.textContent = '');
-
-        // Username validation
-        if (!username.value.trim()) {
-            username.nextElementSibling.textContent = 'Username is required';
-            isValid = false;
-        } else if (username.value.length < 3 || username.value.length > 20) {
-            username.nextElementSibling.textContent = 'Username must be between 3 and 20 characters';
-            isValid = false;
-        }
-
-        // Email validation
-        if (!email.value.trim()) {
-            email.nextElementSibling.textContent = 'Email is required';
-            isValid = false;
-        } else if (!isValidEmail(email.value.trim())) {
-            email.nextElementSibling.textContent = 'Please enter a valid email address';
-            isValid = false;
-        }
-
-        // Password validation
-        if (!password.value.trim()) {
-            password.parentElement.nextElementSibling.textContent = 'Password is required';
-            isValid = false;
-        } else if (password.value.length < 8) {
-            password.parentElement.nextElementSibling.textContent = 'Password must be at least 8 characters long';
-            isValid = false;
-        }
-
-        // Terms validation
-        if (!terms.checked) {
-            terms.parentElement.querySelector('.error') || 
-            terms.parentElement.insertAdjacentHTML('beforeend', 
-                '<small class="error">You must accept the Terms of Service and Privacy Policy</small>');
-            isValid = false;
-        }
-
-        if (!isValid) e.preventDefault();
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('/users/validate-registration', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(error => error.textContent = '');
+            
+            if (data.errors) {
+                // Display validation errors
+                Object.entries(data.errors).forEach(([field, message]) => {
+                    const errorElement = document.querySelector(`#${field}`).nextElementSibling;
+                    errorElement.textContent = message;
+                });
+            } else {
+                // If no errors, submit the form
+                this.submit();
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
-
-    function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
 </script>
 
     <!-- Footer -->

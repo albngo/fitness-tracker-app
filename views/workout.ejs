@@ -300,7 +300,7 @@
                                                     <span>Rest: <%= exercise.rest %></span>
                                                 </div>
                                             </div>
-                                            <% if (exercise.instructions && exercise.instructions.trim() !== "") { %>
+                                            <% if (exercise.instructions && exercise.instructions.length > 0) { %>
                                                 <div class="exercise-instructions">
                                                     <i class="fas fa-info-circle"></i>
                                                     <p><%= exercise.instructions %></p>
@@ -441,9 +441,10 @@
 
     function showWorkoutDetails(workoutData) {
         try {
+            console.log('Workout data:', workoutData); // Debug log
             const workout = typeof workoutData === 'string' ? JSON.parse(workoutData) : workoutData;
-            console.log('Showing workout details:', workout); // Debug log
-
+            console.log('Parsed workout:', workout); // Debug log
+            
             const modal = document.getElementById('workoutModal');
             const modalWorkoutName = document.getElementById('modalWorkoutName');
             const modalWorkoutDate = document.getElementById('modalWorkoutDate');
@@ -459,10 +460,24 @@
             modalDifficulty.textContent = workout.difficulty;
             modalExerciseType.textContent = workout.exercise_type;
 
-            // Parse and display exercises
-            const exercises = typeof workout.exercises === 'string' ? 
-                JSON.parse(workout.exercises) : workout.exercises;
+            // Parse exercises if needed and ensure it's an array
+            let exercises;
+            try {
+                exercises = typeof workout.exercises === 'string' ? 
+                    JSON.parse(workout.exercises) : workout.exercises;
+                console.log('Parsed exercises:', exercises); // Debug log
+            } catch (e) {
+                console.error('Error parsing exercises:', e);
+                exercises = [];
+            }
 
+            // Ensure exercises is an array
+            if (!Array.isArray(exercises)) {
+                console.error('Exercises is not an array:', exercises);
+                exercises = [];
+            }
+
+            // Display exercises
             modalExercises.innerHTML = exercises.map(group => `
                 <div class="exercise-group">
                     <h3>Exercises for ${group.muscle}</h3>
