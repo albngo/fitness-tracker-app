@@ -3587,3 +3587,114 @@ body.dark .legal-content h2 {
     }
 }
 
+/* Water Goal Form Styles */
+.edit-goal-btn {
+    background: none;
+    border: none;
+    color: #4a90e2;
+    cursor: pointer;
+    padding: 0.25rem;
+    margin-left: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.edit-goal-btn:hover {
+    color: #357abd;
+}
+
+.water-goal-form {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.water-goal-form .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.water-goal-form input[type="number"] {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.water-goal-form .unit {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.water-goal-form .form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.water-goal-form .cancel-btn,
+.water-goal-form .save-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.water-goal-form .cancel-btn {
+    background: #fff;
+    border: 1px solid #ced4da;
+    color: #6c757d;
+}
+
+.water-goal-form .save-btn {
+    background: #4a90e2;
+    border: 1px solid #4a90e2;
+    color: #fff;
+}
+
+.water-goal-form .cancel-btn:hover {
+    background: #f8f9fa;
+    border-color: #6c757d;
+}
+
+.water-goal-form .save-btn:hover {
+    background: #357abd;
+    border-color: #357abd;
+}
+
+/* Dark theme styles for water goal form */
+body.dark .water-goal-form {
+    background: #2a2a2a;
+    border-color: #444;
+}
+
+body.dark .water-goal-form input[type="number"] {
+    background: #1a1a1a;
+    border-color: #444;
+    color: #f0f0f0;
+}
+
+body.dark .water-goal-form .unit {
+    color: #aaa;
+}
+
+body.dark .water-goal-form .cancel-btn {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #aaa;
+}
+
+body.dark .water-goal-form .cancel-btn:hover {
+    background: #333;
+    border-color: #555;
+}
+
+body.dark .water-goal-form .save-btn:hover {
+    background: #357abd;
+}
+

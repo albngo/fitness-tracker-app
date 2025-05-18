@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
     profileIcon VARCHAR(255),
     theme ENUM('light', 'dark') DEFAULT 'light',
     font_pref ENUM('default', 'dyslexic') DEFAULT 'default',
+    water_goal_ml INT DEFAULT 2000,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

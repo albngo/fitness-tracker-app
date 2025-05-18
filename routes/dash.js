@@ -59,14 +59,24 @@ router.get('/', async (req, res) => {
         });
     };
 
+    const getUserWaterGoal = () => {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT water_goal_ml FROM users WHERE id = ?';
+            db.query(query, [userId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]?.water_goal_ml || 2000);
+            });
+        });
+    };
+
     try {
-        const [lastSleep, todayWater, recentWorkouts] = await Promise.all([
+        const [lastSleep, todayWater, recentWorkouts, waterGoal] = await Promise.all([
             getLastSleep(),
             getTodayWater(),
-            getRecentWorkouts()
+            getRecentWorkouts(),
+            getUserWaterGoal()
         ]);
 
-        const waterGoal = 2000; // Daily water goal in ml
         const waterPercentage = Math.min(100, Math.round((todayWater / waterGoal) * 100)) || 0;
 
         res.render('dashboard', {

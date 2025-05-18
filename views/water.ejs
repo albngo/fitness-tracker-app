@@ -145,8 +145,31 @@
                         <div class="stat">
                             <span class="label">Goal</span>
                             <span class="value"><%= waterGoal %> ml</span>
+                            <button onclick="toggleGoalForm()" class="edit-goal-btn">
+                                <i class="fas fa-edit"></i>
+                            </button>
                         </div>
                     </div>
+                </div>
+                <!-- Water Goal Form -->
+                <div id="goalForm" class="water-goal-form" style="display: none;">
+                    <form action="/water/update-goal" method="POST">
+                        <div class="input-group">
+                            <input type="number" 
+                                   id="water_goal_ml" 
+                                   name="water_goal_ml" 
+                                   value="<%= waterGoal %>"
+                                   min="500" 
+                                   max="10000" 
+                                   step="50" 
+                                   required>
+                            <span class="unit">ml</span>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" onclick="toggleGoalForm()" class="cancel-btn">Cancel</button>
+                            <button type="submit" class="save-btn">Save Goal</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -340,6 +363,11 @@
 
     // Call initially and whenever theme changes
     updateChartTheme();
+
+    function toggleGoalForm() {
+        const form = document.getElementById('goalForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
 </script>
 
 <!-- Footer -->
